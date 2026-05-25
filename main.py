@@ -8,9 +8,9 @@ from fastapi import FastAPI, HTTPException, Header, Depends, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
-from config import get_settings
+from config import settings
 from database import get_supabase_client
-from schemas import DocumentUploadSchema, DocumentResponseSchema
+from schemas import DocumentUploadSchema, DocumentResponseSchema, UserProfileSchema
 
 # --- Configuration des logs ---
 logging.basicConfig(
@@ -132,6 +132,31 @@ async def get_documents(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Erreur lors de la récupération des données : {str(e)}"
         )
+
+@app.get(
+    "/api/users",
+    response_model=list[UserProfileSchema],
+    summary="Récupère les profils utilisateurs",
+    description="Renvoie la liste des utilisateurs de démonstration."
+)
+async def get_users():
+    """
+    Renvoie une liste statique d'utilisateurs pour la démonstration.
+    """
+    logger.info("Récupération des utilisateurs de démonstration.")
+    # On mock des utilisateurs pour la démo
+    return [
+        {
+            "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+            "full_name": "Alim ZATO",
+            "role": "Patient"
+        },
+        {
+            "id": "b1ffcd88-8d1c-5fa9-cc7e-7cc0ce491b22",
+            "full_name": "Dr. Jean Dupont",
+            "role": "Médecin"
+        }
+    ]
 
 # Montage d'un dossier static si besoin (pour l'instant, on n'a que index.html)
 # app.mount("/static", StaticFiles(directory="static"), name="static")
