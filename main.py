@@ -150,21 +150,20 @@ async def get_documents(
 )
 async def get_users():
     """
-    Renvoie une liste statique d'utilisateurs pour la démonstration.
+    Renvoie la liste des profils patients/médecins pour la sélection dans le formulaire.
     """
-    logger.info("Récupération des utilisateurs de démonstration.")
-    # On mock des utilisateurs pour la démo
+    logger.info("Récupération des profils utilisateurs.")
     return [
-        {
-            "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
-            "full_name": "Alim ZATO",
-            "role": "Patient"
-        },
-        {
-            "id": "b1ffcd88-8d1c-5fa9-cc7e-7cc0ce491b22",
-            "full_name": "Dr. Jean Dupont",
-            "role": "Médecin"
-        }
+        {"id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11", "full_name": "Alim ZATO",       "role": "Patient"},
+        {"id": "b1ffcd88-8d1c-4fa9-ac7e-7cc0ce491b22", "full_name": "Jean DUPONT",      "role": "Médecin"},
+        {"id": "c2aaef77-7e2b-4ab8-bd8f-8dd1df582c33", "full_name": "Marie MARTIN",     "role": "Patient"},
+        {"id": "d3bbfe66-6f3c-4bc7-ae9e-9ee2ef693d44", "full_name": "Pierre BERNARD",   "role": "Patient"},
+        {"id": "e4ccad55-5a4d-4cd6-bf0f-0ff3fa7a4e55", "full_name": "Sophie LEFEBVRE",  "role": "Infirmière"},
+        {"id": "f5ddbe44-4b5e-4de5-aa1a-1aa4ab8b5f66", "full_name": "Mohamed DIALLO",   "role": "Patient"},
+        {"id": "a6eecf33-3c6f-4ef4-bb2b-2bb5bc9c6a77", "full_name": "Camille ROUSSEAU", "role": "Patient"},
+        {"id": "b7fada22-2d7a-4fa3-ac3c-3cc6cd0d7b88", "full_name": "Thomas MOREAU",    "role": "Médecin"},
+        {"id": "c8abeb11-1e8b-4ab2-bd4d-4dd7de1e8c99", "full_name": "Fatima BENALI",    "role": "Patient"},
+        {"id": "d9bcfc00-0f9c-4bc1-ae5e-5ee8ef2f9d00", "full_name": "Lucas SIMON",      "role": "Patient"},
     ]
 
 # Montage d'un dossier static si besoin (pour l'instant, on n'a que index.html)
