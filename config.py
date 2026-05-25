@@ -25,43 +25,23 @@ class Settings(BaseSettings):
         description="L'URL de l'instance Supabase (ex: https://abcde12345.supabase.co)."
     )
     
-    SUPABASE_SERVICE_ROLE_KEY: str = Field(
+    SUPABASE_ANON_KEY: str = Field(
         ...,
         min_length=1,
-        description="Clé de service secrète de Supabase. Utilisée uniquement côté serveur pour bypass la RLS."
+        description="Clé publique (anon) de Supabase."
+    )
+
+    ENCRYPTION_MASTER_KEY: str = Field(
+        ...,
+        min_length=43,
+        description="Clé maîtresse (Fernet) pour chiffrer les données côté serveur."
     )
 
 # Chargement et validation immédiate de la configuration
 try:
     settings = Settings()
 except ValidationError as e:
-    print(
-        "========================================================================",
-        file=sys.stderr
-    )
-    print(
-        "CRITICAL: Échec de la validation de la configuration de l'application !",
-        file=sys.stderr
-    )
-    print(
-        "Veuillez définir correctement les variables d'environnement requises.",
-        file=sys.stderr
-    )
-    print(
-        "========================================================================",
-        file=sys.stderr
-    )
+    print("CRITICAL: Échec de la validation de la configuration !", file=sys.stderr)
     for err in e.errors():
-        field = " -> ".join(str(loc_item) for loc_item in err["loc"])
-        print(f"  [Erreur] {field}: {err['msg']} (Valeur fournie: {err.get('input')})", file=sys.stderr)
-    print(
-        "\nAssurez-vous que vos variables d'environnement ou votre fichier .env contiennent :",
-        file=sys.stderr
-    )
-    print("  - SUPABASE_URL (URL HTTP/HTTPS valide)", file=sys.stderr)
-    print("  - SUPABASE_SERVICE_ROLE_KEY (Chaîne de caractères non vide)", file=sys.stderr)
-    print(
-        "========================================================================",
-        file=sys.stderr
-    )
+        print(f"  [Erreur]: {err['msg']}", file=sys.stderr)
     sys.exit(1)
