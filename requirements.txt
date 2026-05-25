@@ -1,0 +1,7 @@
+fastapi>=0.100.0
+uvicorn>=0.22.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+supabase>=1.0.3
+postgrest>=0.10.0
+cryptography>=41.0.0
