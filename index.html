@@ -261,8 +261,10 @@
 
                             <!-- User selector -->
                             <div class="form-group">
-                                <label for="userId">Utilisateur (UUID — Profil Patient)</label>
-                                <input type="text" id="userId" value="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11" placeholder="UUID de l'utilisateur">
+                                <label for="userId">Utilisateur (Patient cible)</label>
+                                <select id="userId">
+                                    <option value="" disabled selected>Chargement des patients...</option>
+                                </select>
                             </div>
 
                             <div class="form-group">
@@ -854,9 +856,32 @@
             showStatus('Dossier refermé avec succès.', 'success');
         }
 
+        // ─── FETCH USERS ─────────────────────────────────────────────
+
+        async function fetchUsers() {
+            try {
+                const response = await fetch(`${API_URL}/api/users`);
+                if (response.ok) {
+                    const users = await response.json();
+                    const select = document.getElementById('userId');
+                    select.innerHTML = '';
+                    users.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.id;
+                        option.textContent = `${user.full_name} (${user.role}) - ${user.id.substring(0,8)}`;
+                        select.appendChild(option);
+                    });
+                    // Select first user automatically
+                    if(users.length > 0) select.value = users[0].id;
+                }
+            } catch (e) {
+                log('Erreur lors du chargement des utilisateurs : ' + e.message, 'warning');
+            }
+        }
+
         // ─── INIT ─────────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', () => {
-            fetchDocuments();
+            fetchUsers().then(() => fetchDocuments());
         });
     </script>
 </body>
