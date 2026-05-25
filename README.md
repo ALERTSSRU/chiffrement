@@ -1,167 +1,192 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/master/svgs/solid/shield-halved.svg" alt="MedVault Logo" width="80" height="80">
-  <h1 align="center">MedVault</h1>
-
-  <p align="center">
-    <strong>Plateforme de Stockage Médical Sécurisée (Zero-Knowledge)</strong>
-    <br />
-    <br />
-    <a href="#caractéristiques">Caractéristiques</a>
-    ·
-    <a href="#installation">Installation</a>
-    ·
-    <a href="#architecture">Architecture</a>
-    ·
-    <a href="#sécurité">Sécurité</a>
-  </p>
-
-  <p align="center">
-    <img src="https://img.shields.io/badge/Python-3.10+-blue.svg" alt="Python Version">
-    <img src="https://img.shields.io/badge/FastAPI-0.100+-009688.svg" alt="FastAPI">
-    <img src="https://img.shields.io/badge/Supabase-Database-3ecf8e.svg" alt="Supabase">
-    <img src="https://img.shields.io/badge/Security-Zero%20Knowledge-success" alt="Security Zero Knowledge">
-    <img src="https://img.shields.io/badge/Encryption-AES--256--GCM-critical" alt="Encryption">
-  </p>
+  <h1>⚕️ MedVault Pro</h1>
+  <p><strong>Plateforme de Stockage Médical Sécurisée — Chiffrement AES côté Serveur</strong></p>
+  <br/>
+  <img src="https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi" alt="FastAPI">
+  <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ecf8e?style=flat-square&logo=supabase" alt="Supabase">
+  <img src="https://img.shields.io/badge/Chiffrement-AES--128--CBC%20%2B%20HMAC--SHA256-critical?style=flat-square" alt="Encryption">
+  <img src="https://img.shields.io/badge/Encodage-Base64%20(Fernet)-orange?style=flat-square" alt="Base64">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
 </div>
 
-<hr />
+---
 
-## 🛡️ À propos de MedVault
+## 🎯 Description
 
-**MedVault** est une application web de stockage de documents médicaux axée sur la confidentialité absolue. Grâce à un **chiffrement de bout en bout (Zero-Knowledge)**, tous les documents sont chiffrés directement dans votre navigateur. Le serveur ne reçoit, ne stocke, et ne distribue que des données incompréhensibles.
+**MedVault Pro** est une application web de stockage de dossiers médicaux sécurisée. Elle illustre comment un serveur backend peut chiffrer des données sensibles **avant** de les persister en base de données, garantissant qu'un accès direct à Supabase ne révèle aucune information lisible.
 
-**Votre vie privée n'est pas une option, c'est la fondation de cette architecture.**
+> **Contexte pédagogique :** Ce projet démontre les principes fondamentaux du chiffrement symétrique (AES), de l'encodage Base64, et de la sécurisation des données au repos (*data at rest encryption*).
 
 ---
 
-## ✨ Caractéristiques Principales
+## ✨ Fonctionnalités Clés
 
-*   🔒 **Zero-Knowledge Architecture** : Le serveur n'a jamais accès à vos données en clair, ni à vos mots de passe.
-*   🚀 **Performance & API REST** : Propulsé par **FastAPI**, offrant des endpoints JSON rapides et modernes.
-*   🛡️ **Cryptographie Avancée** : Intègre des standards industriels tels que **AES-256-GCM**, **SHA-256**, **BLAKE2b**, et **RSA-2048/4096**.
-*   💾 **Stockage Résilient** : Base de données gérée via **Supabase** (PostgreSQL).
-*   🌐 **Interface Intuitive** : Une application web sans friction pour chiffrer et déchiffrer à la volée.
+| Fonctionnalité | Description |
+|---|---|
+| 🔐 **Chiffrement AES côté serveur** | Le module Python `crypto.py` chiffre titre et contenu via **Fernet** (AES-128-CBC + HMAC-SHA256) avant l'insertion en base |
+| 📄 **Encodage Base64** | Les données chiffrées sont stockées au format Base64 URL-safe — un standard d'encodage binaire-vers-texte |
+| 🔬 **Inspecteur en temps réel** | L'onglet "Inspecteur" compare côte-à-côte ce que voit Supabase (Base64 chiffré) vs. ce que renvoie l'API (texte clair) |
+| 🧪 **Génération de données de test** | Un bouton génère 3 dossiers médicaux réalistes en un clic pour la démonstration |
+| ⚡ **Générateur d'ID aléatoire** | Démontre l'utilisation de `crypto.getRandomValues()` du navigateur pour générer des identifiants cryptographiquement sûrs |
+| 🏥 **Affichage Dossier Médical** | Les documents déchiffrés s'affichent dans une fiche médicale stylisée avec tampon "TRÈS CONFIDENTIEL" |
 
 ---
 
-## 🚀 Démarrage Rapide
+## 🏗️ Architecture
 
-### 1. Prérequis
+```
+┌─────────────────────────────────────────────────────────┐
+│                    NAVIGATEUR WEB                       │
+│                   (index.html)                          │
+│                                                         │
+│  Formulaire → Données en CLAIR → Requête HTTP POST     │
+└─────────────────────┬───────────────────────────────────┘
+                      │ {title: "...", content: "..."}
+                      ▼
+┌─────────────────────────────────────────────────────────┐
+│              SERVEUR FASTAPI (main.py)                  │
+│                                                         │
+│  1. Reçoit les données en clair                         │
+│  2. Appelle ServerCrypto.encrypt_text() → crypto.py     │
+│     ├── Fernet(MASTER_KEY).encrypt(data)                │
+│     └── → Base64 URL-safe (ex: gAAAAABh...)             │
+│  3. Envoie le texte chiffré à Supabase                  │
+└─────────────────────┬───────────────────────────────────┘
+                      │ {encrypted_title: "gAAAAABh...",
+                      │  encrypted_content: "gAAAAABh..."}
+                      ▼
+┌─────────────────────────────────────────────────────────┐
+│             SUPABASE (PostgreSQL)                       │
+│                                                         │
+│  Stocke uniquement des chaînes Base64 illisibles       │
+│  → Accès direct à la DB = données incompréhensibles    │
+└─────────────────────────────────────────────────────────┘
+```
 
-*   Python 3.10 ou supérieur
-*   Un projet [Supabase](https://supabase.com/) actif
+### Flux de Déchiffrement
 
-### 2. Installation
+```
+Supabase → encrypted_title (Base64) → FastAPI
+         → Fernet.decrypt() → texte clair
+         → Réponse JSON lisible → Navigateur
+```
 
+---
+
+## 🔑 Cryptographie Utilisée
+
+### Fernet (librairie `cryptography`)
+
+Fernet est une **implémentation de chiffrement symétrique authentifié** qui garantit :
+
+- **Confidentialité** : AES-128 en mode CBC
+- **Intégrité** : HMAC avec SHA-256 (protection contre l'altération)
+- **Encodage** : Base64 URL-safe (pour stockage en base de données texte)
+
+```python
+# crypto.py — Exemple simplifié
+from cryptography.fernet import Fernet
+
+fernet = Fernet(MASTER_KEY)
+
+# Chiffrement
+cipher_b64 = fernet.encrypt(b"Bilan sanguin normal")
+# → b'gAAAAABh5v3...longue_chaine_base64...'
+
+# Déchiffrement
+plain = fernet.decrypt(cipher_b64)
+# → b'Bilan sanguin normal'
+```
+
+### Pourquoi Base64 ?
+
+Base64 encode des données binaires (octets aléatoires du chiffrement) en caractères ASCII imprimables. C'est nécessaire pour stocker le résultat d'un algorithme de chiffrement dans une colonne `TEXT` d'une base de données PostgreSQL.
+
+---
+
+## 🚀 Installation
+
+### Prérequis
+- Python 3.10+
+- Un projet [Supabase](https://supabase.com) actif
+
+### 1. Cloner et installer
 ```bash
-# Cloner le dépôt
-git clone https://github.com/VOTRE_NOM_UTILISATEUR/chiffrement.git
+git clone https://github.com/ALERTSSRU/chiffrement.git
 cd chiffrement
-
-# Installer les dépendances
 pip install -r requirements.txt
 ```
 
-### 3. Configuration de l'environnement
-
-Créez un fichier `.env` à la racine du projet et ajoutez vos identifiants Supabase :
-
+### 2. Configurer l'environnement
+Créer un fichier `.env` :
 ```env
 SUPABASE_URL=https://votre-projet.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=votre-cle-secrete
+SUPABASE_ANON_KEY=votre-cle-anon
+ENCRYPTION_MASTER_KEY=votre-cle-fernet-base64-32-octets
 ```
 
-### 4. Initialisation de la Base de Données
+> **Générer une clé Fernet :**
+> ```python
+> python -c "import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())"
+> ```
 
-1. Rendez-vous sur votre console **Supabase**.
-2. Ouvrez le **SQL Editor**.
-3. Copiez, collez et exécutez le contenu du fichier `migration.sql`.
+### 3. Initialiser la base de données
+Exécuter le fichier `migration.sql` dans le **SQL Editor** de votre projet Supabase.
 
-### 5. Lancement de l'Application
-
+### 4. Démarrer
 ```bash
-# Démarrer le serveur API
 python main.py
 ```
-*Le serveur sera accessible sur `http://127.0.0.1:8000`.*
-
-Pour utiliser l'interface client, ouvrez simplement le fichier `index.html` dans votre navigateur préféré.
+Ouvrir `http://127.0.0.1:8000` dans votre navigateur.
 
 ---
 
-## 🏗️ Architecture & Flux de Chiffrement
+## 📁 Structure du Projet
 
-L'application repose sur un mécanisme cryptographique asymétrique/symétrique hybride pour garantir une sécurité maximale tout en conservant d'excellentes performances.
-
-### Transmission Sécurisée (Chiffrement)
-
-```mermaid
-graph LR
-    A[Document en clair] --> B(Générer DEK 256 bits)
-    B --> C{Chiffrement AES-GCM}
-    C -->|Titre + Contenu| D[Données Chiffrées]
-    E[Mot de Passe Utilisateur] --> F(Dérivation KEK SHA-256)
-    F --> G{Chiffrement KEK}
-    B --> G
-    G --> H[DEK Chiffrée]
-    D --> I((Serveur FastAPI / Supabase))
-    H --> I
 ```
-
-### Consultation (Déchiffrement)
-
-```mermaid
-graph RL
-    A((Serveur FastAPI / Supabase)) -->|Données & DEK Chiffrées| B[Navigateur Client]
-    C[Saisie du Mot de Passe] --> D(Dérivation KEK SHA-256)
-    B --> E{Déchiffrement DEK}
-    D --> E
-    E --> F[DEK en clair]
-    B --> G{Déchiffrement AES-GCM}
-    F --> G
-    G --> H[Document en clair affiché]
+chiffrement/
+├── main.py           # API FastAPI (endpoints + logique chiffrement)
+├── crypto.py         # Module ServerCrypto (Fernet/AES)
+├── config.py         # Chargement et validation des variables d'environnement
+├── database.py       # Client Supabase
+├── schemas.py        # Schémas Pydantic (validation des données)
+├── migration.sql     # Script SQL d'initialisation de la table
+├── requirements.txt  # Dépendances Python
+├── index.html        # Interface web complète (SPA)
+└── .env              # Variables d'environnement (ne pas versionner)
 ```
 
 ---
 
-## 🔒 Focus sur la Sécurité
+## 🌐 Endpoints API
 
-| Algorithme | Usage | Niveau de Sécurité |
-| :--- | :--- | :--- |
-| **AES-256-GCM** | Chiffrement symétrique des documents | ⭐⭐⭐⭐⭐ (Norme militaire) |
-| **SHA-256 / BLAKE2b** | Dérivation de clés et intégrité | ⭐⭐⭐⭐⭐ (Standard NIST) |
-| **RSA-2048/4096** | Chiffrement asymétrique (disponible) | ⭐⭐⭐⭐⭐ (Très haute sécurité) |
+| Méthode | Route | Description |
+|---|---|---|
+| `GET` | `/` | Sert l'interface web |
+| `POST` | `/api/documents` | Chiffre et sauvegarde un document |
+| `GET` | `/api/documents` | Récupère et déchiffre les documents |
+| `GET` | `/api/documents/raw` | **[Pédagogique]** Données brutes chiffrées (Base64) telles que stockées en DB |
+| `GET` | `/api/users` | Liste les profils utilisateurs |
 
-*Notes:* 
-- *Le mode GCM assure non seulement la confidentialité mais aussi l'**authenticité** des données (protection contre les altérations).*
-- *Aucune clé n'est transmise au réseau (Zero-Knowledge). Si vous perdez votre mot de passe, vos documents sont définitivement illisibles.*
-
----
-
-## 📚 Documentation Détaillée
-
-Pour aller plus loin, veuillez consulter le [Manuel Utilisateur (user_manual.md)](user_manual.md) qui contient :
-- Les spécifications techniques détaillées.
-- Des exemples d'appels API (cURL).
-- Le guide complet d'utilisation.
+> Accéder à la documentation interactive : `http://127.0.0.1:8000/docs`
 
 ---
 
-## 🤝 Contribution
+## 🔒 Conformité et Normes
 
-Les contributions sont les bienvenues ! 
-1. Forkez le projet
-2. Créez votre branche (`git checkout -b feature/IncroyableFonctionnalite`)
-3. Commitez vos changements (`git commit -m 'Ajout d'une fonctionnalité incroyable'`)
-4. Pushez vers la branche (`git push origin feature/IncroyableFonctionnalite`)
-5. Ouvrez une Pull Request
+- **AES (Advanced Encryption Standard)** : Standard NIST approuvé pour le chiffrement des données de santé (HIPAA, HDS)
+- **HMAC-SHA256** : Assure l'intégrité des données (détection de toute altération)
+- **Base64** : Encodage standard RFC 4648
 
 ---
 
 ## 📄 Licence
 
-Ce projet est distribué sous la licence MIT. Voir le fichier `LICENSE` pour plus d'informations.
+MIT — Voir le fichier [LICENSE](LICENSE)
+
+---
 
 <p align="center">
-  <i>Développé pour garantir le secret médical et la souveraineté numérique.</i>
+  <i>Projet réalisé dans le cadre d'un cours de cryptographie — ALIM ZATO // ALERTSSRU</i>
 </p>
