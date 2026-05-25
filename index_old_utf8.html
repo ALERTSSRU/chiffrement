@@ -1,0 +1,1699 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedVault Pro - Espace M├®dical S├®curis├®</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #0a0e17;
+            --bg-surface: rgba(18, 26, 43, 0.7);
+            --bg-surface-hover: rgba(28, 39, 63, 0.85);
+            --bg-card: #121a2b;
+            --border-glow: rgba(0, 242, 254, 0.15);
+            --border-primary: rgba(58, 77, 108, 0.3);
+            --border-focus: #00f2fe;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* Medical Neon Theme */
+            --cyan-glow: #00f2fe;
+            --purple-glow: #9b51e0;
+            --emerald-glow: #05c46b;
+            --rose-glow: #ff5e57;
+            
+            --gradient-primary: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --gradient-purple: linear-gradient(135deg, #9b51e0 0%, #7028e4 100%);
+            --gradient-emerald: linear-gradient(135deg, #05c46b 0%, #0be881 100%);
+            --gradient-dark: linear-gradient(180deg, #121a2b 0%, #0d1320 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(155, 81, 224, 0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header Navigation */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-primary);
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: 800;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); }
+            100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(18, 26, 43, 0.6);
+            border: 1px solid var(--border-primary);
+            padding: 4px;
+            border-radius: 30px;
+            gap: 5px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: none;
+            letter-spacing: 0px;
+            flex: none;
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-primary);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+        }
+
+        /* Tabs container */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Status Banner */
+        .status-message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 20px 0;
+            display: none;
+            backdrop-filter: blur(10px);
+            align-items: center;
+            gap: 12px;
+            animation: slideDown 0.3s ease;
+        }
+
+        .status-message.success {
+            background: rgba(5, 196, 107, 0.1);
+            border: 1px solid var(--emerald-glow);
+            color: #0be881;
+            box-shadow: 0 0 15px rgba(5, 196, 107, 0.1);
+        }
+
+        .status-message.error {
+            background: rgba(255, 94, 87, 0.1);
+            border: 1px solid var(--rose-glow);
+            color: #ff5e57;
+            box-shadow: 0 0 15px rgba(255, 94, 87, 0.1);
+        }
+
+        .status-message.show {
+            display: flex;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 32px;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Cards and Elements */
+        .glass-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0.7;
+        }
+
+        .glass-card.purple-theme::before {
+            background: var(--gradient-purple);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.05);
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title span {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Forms styles */
+        .form-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            background: rgba(10, 14, 23, 0.6);
+            border: 1px solid var(--border-primary);
+            border-radius: 10px;
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: rgba(10, 14, 23, 0.9);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Buttons with rich styling */
+        .btn-flex-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-flex-row .form-group {
+            flex: 1;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-glow-primary {
+            background: var(--gradient-primary);
+            color: #0a0e17;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-glow-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+        }
+
+        .btn-glow-purple {
+            background: var(--gradient-purple);
+            color: white;
+            box-shadow: 0 4px 15px rgba(155, 81, 224, 0.25);
+        }
+
+        .btn-glow-purple:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(155, 81, 224, 0.45);
+        }
+
+        .btn-outline {
+            background: rgba(18, 26, 43, 0.3);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(18, 26, 43, 0.7);
+            border-color: var(--text-secondary);
+        }
+
+        .btn-key-generate {
+            height: 48px;
+            border-radius: 10px;
+            background: var(--gradient-purple);
+            color: white;
+            padding: 0 16px;
+            font-size: 12px;
+            margin-left: 10px;
+            box-shadow: 0 4px 10px rgba(155, 81, 224, 0.15);
+        }
+
+        /* Sidebar Guide Cards */
+        .guide-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .guide-step {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(10, 14, 23, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .guide-step:hover {
+            background: rgba(18, 26, 43, 0.5);
+            border-color: var(--border-glow);
+            transform: translateX(5px);
+        }
+
+        .guide-number {
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan-glow);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .guide-text h4 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .guide-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .glowing-console {
+            background: #05080f;
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            height: 180px;
+            overflow-y: auto;
+            margin-top: 24px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .glowing-console::before {
+            content: "CRYPTO SHELL v1.0.4";
+            position: absolute;
+            top: 4px;
+            right: 12px;
+            font-size: 8px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .console-line {
+            margin-bottom: 6px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .console-time {
+            color: var(--text-muted);
+        }
+
+        .console-msg {
+            color: #0be881;
+            word-break: break-all;
+        }
+
+        .console-msg.info {
+            color: #4facfe;
+        }
+
+        .console-msg.error {
+            color: #ff5e57;
+        }
+
+        .console-msg.warning {
+            color: #ffd32a;
+        }
+
+        /* Stored Documents Section */
+        .documents-section {
+            margin-top: 40px;
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .doc-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .doc-card:hover {
+            border-color: var(--cyan-glow);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 242, 254, 0.1);
+        }
+
+        .doc-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            color: var(--cyan-glow);
+            font-size: 9px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .doc-card-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            padding-right: 70px;
+            word-break: break-all;
+        }
+
+        .doc-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 8px 0;
+        }
+
+        .doc-preview {
+            background: rgba(10, 14, 23, 0.5);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-secondary);
+            word-break: break-all;
+            height: 90px;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .doc-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(180deg, transparent 0%, rgba(10, 14, 23, 0.9) 100%);
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .doc-actions button {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(18, 26, 43, 0.3);
+            border: 1px dashed var(--border-primary);
+            border-radius: 16px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 40px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* VAULT SCREEN - DEDICATED DECRYPTION PAGE */
+        .vault-container {
+            max-width: 900px;
+            margin: 30px auto 80px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .search-vault-box {
+            display: flex;
+            gap: 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-primary);
+            padding: 16px;
+            border-radius: 16px;
+            align-items: center;
+        }
+
+        .search-vault-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        .search-vault-box input:focus {
+            outline: none;
+        }
+
+        /* Decrypt animations */
+        .crypto-process-card {
+            background: #080c14;
+            border: 1px solid var(--border-primary);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .process-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .step-indicators {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .step-ind {
+            background: rgba(18, 26, 43, 0.5);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            opacity: 0.5;
+            transition: all 0.4s;
+        }
+
+        .step-ind.active {
+            opacity: 1;
+            border-color: var(--cyan-glow);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+        }
+
+        .step-ind.success {
+            opacity: 1;
+            border-color: var(--emerald-glow);
+            background: rgba(5, 196, 107, 0.05);
+        }
+
+        .step-ind-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .step-ind.active .step-ind-circle {
+            border-color: var(--cyan-glow);
+            color: var(--cyan-glow);
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .step-ind.success .step-ind-circle {
+            background: var(--emerald-glow);
+            border-color: var(--emerald-glow);
+            color: #000;
+        }
+
+        .step-ind-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .step-ind-desc {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* GORGEOUS MEDICAL DOSSIER LAYOUT */
+        .medical-dossier-card {
+            background: #fff;
+            color: #1e293b;
+            border-radius: 16px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            position: relative;
+            background-image: 
+                linear-gradient(rgba(241, 245, 249, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(241, 245, 249, 0.5) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: none;
+            animation: slideUpOpen 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-left: 10px solid #0056b3;
+        }
+
+        @keyframes slideUpOpen {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .dossier-confidential-stamp {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            border: 4px double #ef4444;
+            color: #ef4444;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: rotate(8deg);
+            opacity: 0.85;
+            user-select: none;
+        }
+
+        .dossier-header {
+            border-bottom: 2px solid #334155;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dossier-clinic-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .dossier-clinic-sub {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .dossier-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+
+        .meta-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-label {
+            font-weight: 700;
+            font-size: 10px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .dossier-body {
+            margin-bottom: 35px;
+        }
+
+        .dossier-section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 6px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dossier-content-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .dossier-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .dossier-signature-block {
+            text-align: right;
+        }
+
+        .dossier-signature-line {
+            width: 180px;
+            border-bottom: 1px solid #475569;
+            margin-top: 40px;
+            margin-bottom: 6px;
+        }
+
+        .dossier-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .dossier-actions button {
+            padding: 10px 18px;
+            font-size: 12px;
+        }
+
+        /* Responsive UI */
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+            .step-indicators {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-icon">Ô×ò</div>
+                    <div class="logo-text">MedVault Pro</div>
+                </div>
+                
+                <div class="nav-tabs">
+                    <button class="tab-btn active" id="tabBtnDashboard" onclick="switchTab('dashboard')">
+                        <span>­ƒôè</span> Transmettre & G├®rer
+                    </button>
+                    <button class="tab-btn" id="tabBtnVault" onclick="switchTab('vault')">
+                        <span>­ƒöô</span> Espace D├®chiffrement
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Status Notifications -->
+        <div id="statusMessage" class="status-message">
+            <span id="statusIcon">­ƒöö</span>
+            <span id="statusText">Initialis├® avec succ├¿s.</span>
+        </div>
+
+        <!-- ==================== DASHBOARD TAB ==================== -->
+        <div id="dashboardTab" class="tab-content active">
+            <div class="main-layout">
+                <!-- Left Panel: Cryptographic Setup & Submission Form -->
+                <div class="form-panel-container">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h2 class="card-title">­ƒöÉ Terminal de <span>Transmission S├®curis├®e</span></h2>
+                            <p class="card-subtitle">Chiffrement fort AES-256-GCM Zero-Knowledge de bout en bout</p>
+                        </div>
+                        
+                        <div class="form-grid">
+                            <div class="form-group-with-button">
+                                <div class="form-group btn-flex-row">
+                                    <div style="flex: 1;">
+                                        <label for="masterKey">Cl├® Principale (Mot de passe)</label>
+                                        <input type="password" id="masterKey" placeholder="Entrez un mot de passe s├®curis├® ou cliquez G├®n├®rer" value="">
+                                    </div>
+                                    <button class="btn-key-generate btn-glow-purple" onclick="generateAndCopyPassword()" style="margin-top: 23px;">
+                                        ÔÜí G├®n├®rer
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="userId">Profil Utilisateur (Extraction PostgreSQL)</label>
+                                <select id="userId" onchange="fetchDocuments()">
+                                    <option value="">Chargement des profils en cours...</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="docTitle">Titre du Dossier M├®dical</label>
+                                <input type="text" id="docTitle" placeholder="Ex: Rapport Cardiologie - Clinique G├®n├®rale">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="docContent">Observations confidentielles & Diagnostics</label>
+                                <textarea id="docContent" placeholder="Saisissez les notes m├®dicales sensibles..."></textarea>
+                            </div>
+                            
+                            <div class="btn-flex-row">
+                                <button class="btn-glow-primary" onclick="encryptAndSubmit()" style="flex: 1.5;">
+                                    ­ƒöÆ Chiffrer & Transmettre
+                                </button>
+                                <button class="btn-outline" onclick="clearForm()" style="flex: 0.5;">
+                                    R├®initialiser
+                                </button>
+                            </div>
+                            
+                            <button class="btn-glow-purple" onclick="generateTestDocuments()" style="width: 100%; margin-top: 5px;">
+                                ­ƒº¬ G├®n├®rer 3 Documents M├®dicaux de Test
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Explanation Flow & Logs -->
+                <div class="side-panel-container">
+                    <div class="glass-card purple-theme" style="height: 100%;">
+                        <div class="card-header">
+                            <h3 class="card-title">­ƒôû Flux <span>Cryptographique</span></h3>
+                            <p class="card-subtitle">Comment vos donn├®es m├®dicales restent priv├®es</p>
+                        </div>
+                        
+                        <div class="guide-flow">
+                            <div class="guide-step">
+                                <div class="guide-number">1</div>
+                                <div class="guide-text">
+                                    <h4>Cl├® Documentaire Unique (DEK)</h4>
+                                    <p>Une cl├® al├®atoire AES-256 (DEK) est g├®n├®r├®e dans votre navigateur pour crypter ce document pr├®cis.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="guide-step">
+                                <div class="guide-number">2</div>
+                                <div class="guide-text">
+                                    <h4>Cl├® Ma├«tresse de Chiffrement (KEK)</h4>
+                                    <p>Votre mot de passe est hach├® via SHA-256 pour d├®river une cl├® ma├«tresse (KEK) qui chiffre la cl├® du document (DEK).</p>
+                                </div>
+                            </div>
+                            
+                            <div class="guide-step">
+                                <div class="guide-number">3</div>
+                                <div class="guide-text">
+                                    <h4>Stockage Z├®ro Connaissance</h4>
+                                    <p>Le serveur FastAPI et Supabase re├ºoivent uniquement les textes chiffr├®s. La cl├® originale ne quitte jamais votre ordinateur.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Live Console logs -->
+                        <div class="glowing-console" id="console">
+                            <div class="console-line">
+                                <span class="console-time">[19:44:02]</span>
+                                <span class="console-msg info">Syst├¿me MedVault op├®rationnel. Pr├¬t pour chiffrement local.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents section -->
+            <div class="documents-section" id="documents">
+                <div class="section-header">
+                    <h2 class="card-title">­ƒôü Dossiers M├®dicaux <span>Sauvegard├®s</span></h2>
+                </div>
+                
+                <div class="documents-grid" id="documentsList">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">­ƒöÆ</div>
+                        <p>Aucun dossier stock├®. Choisissez un profil ci-dessus ou g├®n├®rez des donn├®es de test.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VAULT TAB (DEDICATED DECRYPTION) ==================== -->
+        <div id="vaultTab" class="tab-content">
+            <div class="vault-container">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2 class="card-title">­ƒöô Coffre-fort de <span>D├®chiffrement D├®di├®</span></h2>
+                        <p class="card-subtitle">Chargez un dossier m├®dical chiffr├® par son identifiant unique et d├®cryptez-le localement</p>
+                    </div>
+                    
+                    <div class="search-vault-box">
+                        <span style="font-size: 18px;">­ƒöì</span>
+                        <input type="text" id="vaultDocId" placeholder="Collez l'UUID du document m├®dical (Ex: f81d4fae-7dec-...)" oninput="onVaultDocIdChanged()">
+                        <button class="btn-outline" onclick="loadVaultDocument()" style="padding: 10px 16px; font-size: 12px; border-radius: 8px;">
+                            Charger
+                        </button>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label for="vaultMasterKey">Saisir la Cl├® Principale de D├®chiffrement</label>
+                            <input type="password" id="vaultMasterKey" placeholder="Entrez le mot de passe original pour d├®verrouiller ce document">
+                        </div>
+                        
+                        <button class="btn-glow-primary" id="btnDecryptVault" onclick="decryptVaultDocument()" style="width: 100%; justify-content: center;" disabled>
+                            ­ƒöô D├®verrouiller le Dossier M├®dical
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Crytographic stage tracker card -->
+                <div class="crypto-process-card" id="cryptoProcessTracker" style="display: none;">
+                    <div class="process-title">Analyse du d├®codage cryptographique local</div>
+                    <div class="step-indicators">
+                        <div class="step-ind" id="stepKEK">
+                            <div class="step-ind-circle">1</div>
+                            <div class="step-ind-label">D├®rivation KEK</div>
+                            <div class="step-ind-desc">SHA-256 sur mot de passe</div>
+                        </div>
+                        <div class="step-ind" id="stepDEK">
+                            <div class="step-ind-circle">2</div>
+                            <div class="step-ind-label">D├®chiffrement DEK</div>
+                            <div class="step-ind-desc">AES-GCM sur la cl├® du doc</div>
+                        </div>
+                        <div class="step-ind" id="stepData">
+                            <div class="step-ind-circle">3</div>
+                            <div class="step-ind-label">Clairtext Doc</div>
+                            <div class="step-ind-desc">D├®chiffrement des donn├®es</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical dossier display card (white medical paper sheet) -->
+                <div class="medical-dossier-card" id="medicalDossier">
+                    <div class="dossier-confidential-stamp">TR├êS CONFIDENTIEL</div>
+                    
+                    <div class="dossier-header">
+                        <div class="dossier-clinic-title">ÔÜò´©Å DOSSIER M├ëDICAL S├ëCURIS├ë</div>
+                        <div class="dossier-clinic-sub">Service de Cryptographie Clinique MedVault</div>
+                        
+                        <div class="dossier-meta-grid">
+                            <div class="meta-field">
+                                <span class="meta-label">ID Document</span>
+                                <span class="meta-value" id="dosDocId">f81d4fae-7dec-11d0-a765-00a0c91e6bf6</span>
+                            </div>
+                            <div class="meta-field">
+                                <span class="meta-label">Propri├®taire (Patient ID)</span>
+                                <span class="meta-value" id="dosUserId">a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11</span>
+                            </div>
+                            <div class="meta-field">
+                                <span class="meta-label">Date d'Enregistrement</span>
+                                <span class="meta-value" id="dosDate">18 Mai 2026 - 19:44</span>
+                            </div>
+                            <div class="meta-field">
+                                <span class="meta-label">Statut du Dossier</span>
+                                <span class="meta-value" style="color: #05c46b; font-weight: 700;">­ƒöô D├ëCHIFFR├ë EN M├ëMOIRE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dossier-body">
+                        <div class="dossier-section-title">Diagnostic / Titre</div>
+                        <h3 id="dosTitleText" style="font-size: 18px; margin-bottom: 20px; font-weight: 700; color: #0f172a;">-</h3>
+                        
+                        <div class="dossier-section-title">Contenu M├®dical R├®cup├®r├®</div>
+                        <div class="dossier-content-text" id="dosContentText">-</div>
+                    </div>
+
+                    <div class="dossier-footer">
+                        <div>
+                            <span>Garantie de bout en bout. Cryptographie locale browser-side.</span>
+                        </div>
+                        <div class="dossier-signature-block">
+                            <span>Visa du Praticien Responsable</span>
+                            <div class="dossier-signature-line"></div>
+                            <span style="font-weight: 600;">Dr. Cryptos, MedVault Pro</span>
+                        </div>
+                    </div>
+
+                    <div class="dossier-actions">
+                        <button class="btn-outline" onclick="window.print()" style="background: white; border: 1px solid #cbd5e1; color: #1e293b;">
+                            ­ƒû¿´©Å Imprimer le Dossier
+                        </button>
+                        <button class="btn-glow-primary" onclick="lockDossier()" style="background: #0f172a; color: white;">
+                            ­ƒöÆ Refermer le Dossier
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+        const DOCUMENTS = [];
+        let SELECTED_VAULT_DOC = null;
+
+        function log(message, type = 'info') {
+            const console = document.getElementById('console');
+            if (!console) return;
+            const line = document.createElement('div');
+            line.className = 'console-line';
+            
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'console-time';
+            timeSpan.textContent = `[${new Date().toLocaleTimeString()}]`;
+            
+            const msgSpan = document.createElement('span');
+            msgSpan.className = `console-msg ${type}`;
+            msgSpan.textContent = message;
+            
+            line.appendChild(timeSpan);
+            line.appendChild(msgSpan);
+            console.appendChild(line);
+            console.scrollTop = console.scrollHeight;
+        }
+
+        // Tab switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            
+            if (tabId === 'dashboard') {
+                document.getElementById('dashboardTab').classList.add('active');
+                document.getElementById('tabBtnDashboard').classList.add('active');
+            } else if (tabId === 'vault') {
+                document.getElementById('vaultTab').classList.add('active');
+                document.getElementById('tabBtnVault').classList.add('active');
+                
+                // Copy current master key to vault master key if available
+                const masterKey = document.getElementById('masterKey').value;
+                if (masterKey) {
+                    document.getElementById('vaultMasterKey').value = masterKey;
+                }
+            }
+        }
+
+        function generateAndCopyPassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
+            let password = '';
+            
+            const randomValues = crypto.getRandomValues(new Uint8Array(32));
+            for (let i = 0; i < 32; i++) {
+                password += chars[randomValues[i] % chars.length];
+            }
+            
+            document.getElementById('masterKey').value = password;
+            
+            // Sync to vault master key input
+            document.getElementById('vaultMasterKey').value = password;
+            
+            navigator.clipboard.writeText(password).then(() => {
+                showStatus('Cl├® ma├«tresse g├®n├®r├®e et copi├®e avec succ├¿s !', 'success');
+                log('Nouvelle cl├® principale g├®n├®r├®e (32 caract├¿res, copi├®e dans le presse-papier)', 'info');
+            }).catch(() => {
+                showStatus('Cl├® g├®n├®r├®e. Copiez-la manuellement.', 'success');
+            });
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('statusMessage');
+            const icon = document.getElementById('statusIcon');
+            const text = document.getElementById('statusText');
+            
+            text.textContent = message;
+            icon.textContent = type === 'success' ? 'Ô£à' : 'ÔØî';
+            status.className = `status-message ${type} show`;
+            
+            setTimeout(() => status.classList.remove('show'), 5000);
+        }
+
+        async function encryptAndSubmit() {
+            const masterKey = document.getElementById('masterKey').value.trim();
+            const userId = document.getElementById('userId').value.trim();
+            const title = document.getElementById('docTitle').value.trim();
+            const content = document.getElementById('docContent').value.trim();
+
+            if (!masterKey) {
+                showStatus('Veuillez sp├®cifier une cl├® principale (mot de passe)', 'error');
+                return;
+            }
+
+            if (!userId) {
+                showStatus('Vaudriez-vous s├®lectionner un profil utilisateur valide', 'error');
+                return;
+            }
+
+            if (!title || !content) {
+                showStatus('Veuillez remplir le titre et le contenu du dossier m├®dical', 'error');
+                return;
+            }
+
+            try {
+                log('G├®n├®ration de la cl├® cryptographique unique du document (DEK)...');
+                const dek = crypto.getRandomValues(new Uint8Array(32));
+                
+                log('Chiffrement local AES-GCM du titre...');
+                const encTitle = await encryptAES(title, dek);
+                
+                log('Chiffrement local AES-GCM du contenu sensible...');
+                const encContent = await encryptAES(content, dek);
+                
+                log('D├®rivation de la cl├® ma├«tresse locale (KEK) via SHA-256...');
+                const kek = await deriveKey(masterKey);
+                
+                log('Chiffrement de la DEK avec la cl├® ma├«tresse KEK...');
+                const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
+                const encDek = await encryptAES(dekString, kek);
+
+                log('Envoi cryptographique s├®curis├® au serveur FastAPI...');
+                const payload = {
+                    encrypted_title: encTitle,
+                    encrypted_content: encContent,
+                    encrypted_dek: encDek
+                };
+                
+                const response = await fetch(`${API_URL}/api/documents`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-User-Id': userId
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('Succ├¿s ! Le serveur a stock├® les donn├®es sans les comprendre (ID : ' + data.id.substring(0, 8) + '...)', 'info');
+                    showStatus('Dossier m├®dical chiffr├® et stock├® en base de donn├®es avec succ├¿s', 'success');
+                    
+                    document.getElementById('docTitle').value = '';
+                    document.getElementById('docContent').value = '';
+                    
+                    await fetchDocuments();
+                } else {
+                    const errorText = await response.text();
+                    log('Erreur serveur: ' + errorText, 'error');
+                    showStatus('Erreur serveur lors de la transmission', 'error');
+                }
+            } catch (error) {
+                log('Erreur cryptographique : ' + error.message, 'error');
+                showStatus('Une erreur est survenue pendant le chiffrement', 'error');
+            }
+        }
+
+        async function encryptAES(text, key) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            
+            const encryptKey = await crypto.subtle.importKey(
+                'raw', key, { name: 'AES-GCM' }, false, ['encrypt']
+            );
+            
+            const encrypted = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv }, encryptKey, data
+            );
+            
+            const combined = new Uint8Array(iv.length + encrypted.byteLength);
+            combined.set(iv);
+            combined.set(new Uint8Array(encrypted), iv.length);
+            
+            return btoa(String.fromCharCode.apply(null, Array.from(combined)));
+        }
+
+        async function decryptAES(ciphertext, key) {
+            try {
+                const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
+                const iv = combined.slice(0, 12);
+                const data = combined.slice(12);
+                
+                const decryptKey = await crypto.subtle.importKey(
+                    'raw', key, { name: 'AES-GCM' }, false, ['decrypt']
+                );
+                
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv }, decryptKey, data
+                );
+                
+                return new TextDecoder().decode(decrypted);
+            } catch (error) {
+                throw new Error('├ëchec du d├®chiffrement AES-GCM: cl├® invalide ou donn├®es alt├®r├®es.');
+            }
+        }
+
+        async function deriveKey(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            return await crypto.subtle.digest('SHA-256', data);
+        }
+
+        async function fetchDocuments() {
+            const userId = document.getElementById('userId').value;
+            if (!userId) {
+                const container = document.getElementById('documentsList');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">­ƒöÆ</div>
+                        <p>S├®lectionnez un profil pour charger ses dossiers m├®dicaux.</p>
+                    </div>`;
+                DOCUMENTS.length = 0;
+                return;
+            }
+            
+            try {
+                log('Chargement des dossiers m├®dicaux chiffr├®s pour ' + userId + '...');
+                const response = await fetch(`${API_URL}/api/documents`, {
+                    headers: { 'X-User-Id': userId }
+                });
+
+                if (response.ok) {
+                    const docs = await response.json();
+                    DOCUMENTS.length = 0;
+                    DOCUMENTS.push(...docs);
+                    renderDocuments();
+                    log(`${docs.length} document(s) chiffr├®(s) r├®cup├®r├®(s) du serveur`, 'info');
+                } else {
+                    log('Impossible de r├®cup├®rer les dossiers m├®dicaux', 'error');
+                }
+            } catch (error) {
+                log('Erreur de connexion : ' + error.message, 'error');
+            }
+        }
+
+        function renderDocuments() {
+            const container = document.getElementById('documentsList');
+            
+            if (DOCUMENTS.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">­ƒôü</div>
+                        <p>Aucun dossier m├®dical trouv├® pour ce profil. Utilisez le g├®n├®rateur de test.</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = DOCUMENTS.map((doc, index) => `
+                <div class="doc-card" onclick="openDocumentInVault('${doc.id}')">
+                    <span class="doc-badge">­ƒöÆ Chiffr├®</span>
+                    <div class="doc-card-title">Dossier m├®dical chiffr├®</div>
+                    
+                    <div class="doc-meta">
+                        <span>Cr├®├® le : ${new Date(doc.created_at).toLocaleDateString()}</span>
+                        <span>Doc ID : ${doc.id.substring(0, 8)}...</span>
+                    </div>
+                    
+                    <div class="doc-preview">${doc.encrypted_content.substring(0, 160)}...</div>
+                    
+                    <div class="doc-actions">
+                        <button class="btn-glow-primary" style="padding: 10px 14px; font-size: 11px;">
+                            ­ƒöô Ouvrir dans le Coffre
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function fetchUsers() {
+            try {
+                log('Interrogation de la base de donn├®es PostgreSQL pour lister les profils...');
+                const response = await fetch(`${API_URL}/api/users`);
+                if (response.ok) {
+                    const users = await response.json();
+                    const select = document.getElementById('userId');
+                    if (users.length === 0) {
+                        select.innerHTML = '<option value="">Aucun profil utilisateur trouv├®</option>';
+                        log('Aucun profil existant dans la base de donn├®es.', 'warning');
+                        return;
+                    }
+                    
+                    select.innerHTML = users.map(user => 
+                        `<option value="${user.id}">${user.full_name} (${user.role}) - ${user.id}</option>`
+                    ).join('');
+                    
+                    log(`${users.length} profils charg├®s avec succ├¿s depuis la DB !`, 'info');
+                    
+                    // Default to ZATO
+                    const zatoUser = users.find(u => u.full_name.toUpperCase().includes('ZATO'));
+                    if (zatoUser) {
+                        select.value = zatoUser.id;
+                        log(`Profil '${zatoUser.full_name}' s├®lectionn├® par d├®faut.`, 'info');
+                    } else {
+                        select.value = users[0].id;
+                    }
+                    
+                    await fetchDocuments();
+                } else {
+                    log('Erreur de r├®cup├®ration des utilisateurs: ' + response.status, 'error');
+                }
+            } catch (error) {
+                log('Erreur : Impossible de contacter le backend FastAPI pour r├®cup├®rer les utilisateurs.', 'error');
+            }
+        }
+
+        // Vault operations (Espace D├®chiffrement)
+        function onVaultDocIdChanged() {
+            const docId = document.getElementById('vaultDocId').value.trim();
+            const btn = document.getElementById('btnDecryptVault');
+            
+            // Allow decryption button only if doc ID seems filled
+            btn.disabled = docId.length < 10;
+        }
+
+        function openDocumentInVault(docId) {
+            document.getElementById('vaultDocId').value = docId;
+            onVaultDocIdChanged();
+            switchTab('vault');
+            loadVaultDocument();
+        }
+
+        function loadVaultDocument() {
+            const docId = document.getElementById('vaultDocId').value.trim();
+            if (!docId) {
+                showStatus('Veuillez entrer un UUID de document m├®dical', 'error');
+                return;
+            }
+
+            // Find in loaded documents
+            const found = DOCUMENTS.find(d => d.id === docId);
+            if (found) {
+                SELECTED_VAULT_DOC = found;
+                showStatus('Dossier chiffr├® charg├® avec succ├¿s du cache local !', 'success');
+                log('Charg├® document local: ' + docId, 'info');
+                resetDecryptionVaultUI();
+            } else {
+                // If not in local list, simulate fetching it directly or fetch from backend for the user
+                // Let's search all loaded profiles or find if we can query it directly
+                // (Backend has /api/documents, we will assume we seek it in the current loaded profile)
+                log('Recherche du document chiffr├® dans le pool local...', 'warning');
+                SELECTED_VAULT_DOC = null;
+                showStatus('Document introuvable. S├®lectionnez le bon utilisateur d\'abord !', 'error');
+            }
+        }
+
+        function resetDecryptionVaultUI() {
+            document.getElementById('cryptoProcessTracker').style.display = 'none';
+            document.getElementById('medicalDossier').style.display = 'none';
+            
+            document.querySelectorAll('.step-ind').forEach(s => {
+                s.className = 'step-ind';
+            });
+        }
+
+        function lockDossier() {
+            resetDecryptionVaultUI();
+            log('Dossier m├®dical referm├® et d├®charg├® de la m├®moire volatile.', 'info');
+            showStatus('Dossier referm├® avec succ├¿s', 'success');
+        }
+
+        async function decryptVaultDocument() {
+            const masterKey = document.getElementById('vaultMasterKey').value.trim();
+            if (!masterKey) {
+                showStatus('Cl├® ma├«tresse manquante pour le d├®chiffrement !', 'error');
+                return;
+            }
+
+            if (!SELECTED_VAULT_DOC) {
+                showStatus('Aucun document chiffr├® charg├®. Cliquez sur Charger ou s├®lectionnez-en un dans la liste.', 'error');
+                return;
+            }
+
+            const tracker = document.getElementById('cryptoProcessTracker');
+            tracker.style.display = 'block';
+            
+            const stepKEK = document.getElementById('stepKEK');
+            const stepDEK = document.getElementById('stepDEK');
+            const stepData = document.getElementById('stepData');
+            
+            try {
+                // STAGE 1: Derive KEK
+                stepKEK.className = 'step-ind active';
+                log('Vault : D├®marrage du d├®codage cryptographique...');
+                await sleep(600);
+                
+                const kek = await deriveKey(masterKey);
+                stepKEK.className = 'step-ind success';
+                log('Vault : ├ëtape 1 - Cl├® ma├«tresse locale (KEK) d├®riv├®e via SHA-256 avec succ├¿s.');
+                
+                // STAGE 2: Decrypt DEK
+                stepDEK.className = 'step-ind active';
+                await sleep(700);
+                
+                let dekStr;
+                try {
+                    dekStr = await decryptAES(SELECTED_VAULT_DOC.encrypted_dek, kek);
+                } catch (e) {
+                    stepDEK.className = 'step-ind active';
+                    throw new Error('Mot de passe incorrect : impossible de d├®chiffrer la cl├® du document (DEK).');
+                }
+                
+                const dek = Uint8Array.from(atob(dekStr), c => c.charCodeAt(0));
+                stepDEK.className = 'step-ind success';
+                log('Vault : ├ëtape 2 - Cl├® documentaire (DEK) d├®chiffr├®e avec succ├¿s via AES-256-GCM.');
+                
+                // STAGE 3: Decrypt Data
+                stepData.className = 'step-ind active';
+                await sleep(600);
+                
+                const title = await decryptAES(SELECTED_VAULT_DOC.encrypted_title, dek);
+                const content = await decryptAES(SELECTED_VAULT_DOC.encrypted_content, dek);
+                
+                stepData.className = 'step-ind success';
+                log('Vault : ├ëtape 3 - D├®cryptage du Titre et Contenu sensibles achev├® localement.');
+                
+                // Display dossier card with cleartext
+                await sleep(400);
+                
+                document.getElementById('dosDocId').textContent = SELECTED_VAULT_DOC.id;
+                document.getElementById('dosUserId').textContent = SELECTED_VAULT_DOC.user_id;
+                document.getElementById('dosDate').textContent = new Date(SELECTED_VAULT_DOC.created_at).toLocaleString();
+                document.getElementById('dosTitleText').textContent = title;
+                document.getElementById('dosContentText').textContent = content;
+                
+                document.getElementById('medicalDossier').style.display = 'block';
+                log('Vault : Dossier m├®dical d├®verrouill├® et affich├® dans l\'espace m├®moire.', 'info');
+                showStatus('Dossier m├®dical d├®chiffr├® avec succ├¿s !', 'success');
+                
+            } catch (error) {
+                log('Vault Erreur : ' + error.message, 'error');
+                showStatus(error.message, 'error');
+                resetDecryptionVaultUI();
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function clearForm() {
+            document.getElementById('docTitle').value = '';
+            document.getElementById('docContent').value = '';
+        }
+
+        async function generateTestDocuments() {
+            let masterKey = document.getElementById('masterKey').value.trim();
+            const userId = document.getElementById('userId').value.trim();
+
+            if (!userId) {
+                showStatus('Veuillez d\'abord s├®lectionner un utilisateur', 'error');
+                return;
+            }
+
+            if (!masterKey) {
+                log('Cl├® principale manquante, g├®n├®ration automatique d\'une cl├®...', 'info');
+                generateAndCopyPassword();
+                masterKey = document.getElementById('masterKey').value.trim();
+            }
+
+            const samples = [
+                {
+                    title: "Rapport de Cardiologie - Dr. Martin",
+                    content: "Rythme cardiaque normal ├á 72 bpm. Trac├® ECG r├®gulier. L├®g├¿re hypertension ├á surveiller (135/85). Recommandation: r├®duire le sel, surveiller la tension 2 fois par semaine et pratiquer une activit├® physique mod├®r├®e."
+                },
+                {
+                    title: "Bilan Sanguin Complet - Laboratoire BioSant├®",
+                    content: "H├®moglobine: 14.2 g/dL (normal: 13-17)\nCholest├®rol Total: 2.10 g/L (Recommand├® < 2.0)\nGlyc├®mie ├á jeun: 0.95 g/L (normal: 0.70-1.10)\nVitamine D: 22 ng/mL (Carence l├®g├¿re, prescription d'ampoules de D3 recommand├®e)."
+                },
+                {
+                    title: "Ordonnance M├®dicale - Cabinet P├®diatrique",
+                    content: "Prescription th├®rapeutique pour 3 mois:\n1. Parac├®tamol 1g - 1 comprim├® en cas de c├®phal├®es ou douleurs (maximum 3 par jour)\n2. Magn├®sium Marin 300mg - 1 g├®lule au petit-d├®jeuner\n3. Vitamine D3 100 000 UI - 1 ampoule ├á prendre avec un repas gras ├á J0 et J30"
+                }
+            ];
+
+            log('G├®n├®ration de 3 dossiers m├®dicaux de test chiffr├®s...', 'info');
+            
+            try {
+                for (const sample of samples) {
+                    log(`Chiffrement local de : "${sample.title}"...`);
+                    
+                    const dek = crypto.getRandomValues(new Uint8Array(32));
+                    const encTitle = await encryptAES(sample.title, dek);
+                    const encContent = await encryptAES(sample.content, dek);
+                    const kek = await deriveKey(masterKey);
+                    const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
+                    const encDek = await encryptAES(dekString, kek);
+
+                    const payload = {
+                        encrypted_title: encTitle,
+                        encrypted_content: encContent,
+                        encrypted_dek: encDek
+                    };
+                    
+                    const response = await fetch(`${API_URL}/api/documents`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-User-Id': userId
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Erreur serveur ${response.status}`);
+                    }
+                }
+
+                log('Les 3 dossiers de test ont ├®t├® ins├®r├®s et chiffr├®s avec succ├¿s !', 'success');
+                showStatus('3 dossiers m├®dicaux de test chiffr├®s et ins├®r├®s !', 'success');
+                await fetchDocuments();
+            } catch (error) {
+                log('Erreur de g├®n├®ration : ' + error.message, 'error');
+                showStatus('Erreur de g├®n├®ration : ' + error.message, 'error');
+            }
+        }
+
+        window.addEventListener('load', fetchUsers);
+    </script>
+</body>
+</html>

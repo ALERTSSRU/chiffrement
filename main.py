@@ -1,145 +1,142 @@
 # main.py
-# Application principale FastAPI pour l'API REST de stockage de documents médicaux chiffrés côté serveur.
+# Point d'entrée principal de l'API FastAPI
+# Architecture : Zero-Knowledge. L'API reçoit et stocke des données DÉJÀ CHIFFRÉES.
 
-import uuid
-from typing import List
-from fastapi import FastAPI, Depends, HTTPException, status, Header
-from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
-from postgrest.exceptions import APIError
-from supabase import Client
+import logging
+from uuid import UUID
+from fastapi import FastAPI, HTTPException, Header, Depends, status
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 
+from config import get_settings
 from database import get_supabase_client
-from schemas import DocumentUploadSchema, DocumentResponseSchema, UserProfileSchema
-from crypto import ServerCrypto
+from schemas import DocumentUploadSchema, DocumentResponseSchema
 
+# --- Configuration des logs ---
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - [%(levelname)s] - %(name)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+# --- Initialisation de l'application FastAPI ---
 app = FastAPI(
-    title="Server-Side Medical Storage API",
-    description="API REST de stockage de documents médicaux avec chiffrement côté serveur.",
+    title="API de Stockage Médical Zéro-Connaissance",
+    description="Stocke des documents chiffrés côté client sans jamais connaître leur contenu en clair.",
     version="1.0.0"
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "X-User-Id"],
+# ─── SERVING DU FRONTEND ────────────────────────────────────────────────────────
+
+@app.get("/", response_class=HTMLResponse, summary="Affiche l'interface web (index.html)")
+async def serve_index():
+    """
+    Sert le fichier index.html situé à la racine du projet.
+    """
+    try:
+        with open("index.html", "r", encoding="utf-8") as f:
+            content = f.read()
+        return HTMLResponse(content=content)
+    except FileNotFoundError:
+        logger.error("Le fichier index.html est introuvable.")
+        raise HTTPException(status_code=404, detail="Interface web introuvable.")
+
+# ─── ENDPOINTS DE L'API ─────────────────────────────────────────────────────────
+
+@app.post(
+    "/api/documents",
+    response_model=DocumentResponseSchema,
+    status_code=status.HTTP_201_CREATED,
+    summary="Sauvegarde un document chiffré",
+    description="Reçoit un document déjà chiffré par le client et le stocke en base de données."
 )
-
-@app.get("/", response_class=FileResponse)
-async def read_index():
-    return FileResponse("index.html")
-
-async def get_current_user_id(
-    x_user_id: str = Header(
-        default="a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+async def create_document(
+    document: DocumentUploadSchema,
+    x_user_id: UUID = Header(
+        ...,
+        description="L'UUID de l'utilisateur qui soumet le document.",
         alias="X-User-Id"
-    )
-) -> uuid.UUID:
-    try:
-        return uuid.UUID(x_user_id)
-    except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="L'en-tête 'X-User-Id' est manquant ou n'est pas un UUID valide."
-        )
+    ),
+    supabase=Depends(get_supabase_client)
+):
+    """
+    Stocke un nouveau document médical chiffré dans Supabase.
+    L'API n'a pas la clé pour lire le contenu.
+    """
+    logger.info(f"Création d'un document pour l'utilisateur: {x_user_id}")
 
-@app.post("/api/documents", response_model=DocumentResponseSchema, status_code=status.HTTP_201_CREATED)
-async def create_medical_document(
-    payload: DocumentUploadSchema,
-    user_id: uuid.UUID = Depends(get_current_user_id),
-    db: Client = Depends(get_supabase_client)
-) -> DocumentResponseSchema:
-    try:
-        # CHIFFREMENT CÔTÉ SERVEUR : On chiffre le texte clair avant de l'envoyer à la DB
-        encrypted_title = ServerCrypto.encrypt_text(payload.title)
-        encrypted_content = ServerCrypto.encrypt_text(payload.content)
+    # Préparation du payload pour Supabase
+    db_payload = {
+        "user_id": str(x_user_id),
+        "encrypted_title": document.encrypted_title,
+        "encrypted_content": document.encrypted_content,
+        "encrypted_dek": document.encrypted_dek
+    }
 
-        document_data = {
-            "user_id": str(user_id),
-            "encrypted_title": encrypted_title,
-            "encrypted_content": encrypted_content
-        }
-        
-        response = db.table("medical_documents").insert(document_data).execute()
+    try:
+        # Insertion dans Supabase
+        response = supabase.table("medical_documents").insert(db_payload).execute()
         
         if not response.data:
-            raise HTTPException(status_code=500, detail="Erreur lors de l'insertion.")
-            
-        inserted_row = response.data[0]
-        
-        # On reconstitue l'objet avec les données en clair pour la réponse
-        inserted_row["title"] = payload.title
-        inserted_row["content"] = payload.content
-        return DocumentResponseSchema.model_validate(inserted_row)
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+            logger.error("Supabase n'a renvoyé aucune donnée après l'insertion.")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Échec de l'enregistrement en base de données."
+            )
 
-@app.get("/api/documents", response_model=List[DocumentResponseSchema])
-async def list_medical_documents(
-    user_id: uuid.UUID = Depends(get_current_user_id),
-    db: Client = Depends(get_supabase_client)
-) -> List[DocumentResponseSchema]:
-    try:
-        response = db.table("medical_documents").select("*").eq("user_id", str(user_id)).execute()
-        
-        documents = []
-        for row in response.data:
-            try:
-                # DÉCHIFFREMENT CÔTÉ SERVEUR : On déchiffre les données de la DB
-                row["title"] = ServerCrypto.decrypt_text(row["encrypted_title"])
-                row["content"] = ServerCrypto.decrypt_text(row["encrypted_content"])
-                documents.append(DocumentResponseSchema.model_validate(row))
-            except Exception as decrypt_error:
-                print(f"Erreur de déchiffrement pour le document {row.get('id')}: {decrypt_error}")
-                # On ignore les documents qu'on ne peut pas déchiffrer
-                continue
-                
-        return documents
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.info(f"Document créé avec succès (ID: {response.data[0]['id']}).")
+        return response.data[0]
 
-@app.get(
-    "/api/documents/raw",
-    summary="Afficher les documents chiffrés bruts (Base64) tels que stockés en DB",
-    description="Endpoint pédagogique : retourne les données exactement comme elles sont stockées dans Supabase, sans déchiffrement. Utile pour démontrer que le serveur stocke des données illisibles."
-)
-async def list_raw_documents(
-    user_id: uuid.UUID = Depends(get_current_user_id),
-    db: Client = Depends(get_supabase_client)
-):
-    """Route pour afficher les données brutes chiffrées de la base de données."""
-    try:
-        response = (
-            db.table("medical_documents")
-            .select("id, user_id, encrypted_title, encrypted_content, created_at")
-            .eq("user_id", str(user_id))
-            .execute()
+    except Exception as e:
+        logger.error(f"Erreur lors de l'insertion dans Supabase: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erreur base de données : {str(e)}"
         )
-        return response.data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get(
-    "/api/users",
-    response_model=List[UserProfileSchema],
-    status_code=status.HTTP_200_OK,
-    summary="Récupérer tous les profils d'utilisateurs disponibles",
+    "/api/documents",
+    response_model=list[DocumentResponseSchema],
+    summary="Récupère les documents chiffrés",
+    description="Renvoie la liste de tous les documents chiffrés appartenant à l'utilisateur."
 )
-async def list_user_profiles(
-    db: Client = Depends(get_supabase_client)
-) -> List[UserProfileSchema]:
+async def get_documents(
+    x_user_id: UUID = Header(
+        ...,
+        description="L'UUID de l'utilisateur dont on veut récupérer les documents.",
+        alias="X-User-Id"
+    ),
+    supabase=Depends(get_supabase_client)
+):
+    """
+    Récupère tous les documents associés à un user_id spécifique.
+    L'API renvoie les données chiffrées (Base64). Le client devra les déchiffrer.
+    """
+    logger.info(f"Récupération des documents pour l'utilisateur: {x_user_id}")
+    
     try:
-        response = db.table("profiles").select("id, full_name, role").execute()
-        return [UserProfileSchema.model_validate(row) for row in response.data]
-    except APIError as e:
-        raise HTTPException(status_code=400, detail=f"Erreur DB ({e.code}): {e.message}")
+        # Requête Supabase
+        response = supabase.table("medical_documents") \
+            .select("*") \
+            .eq("user_id", str(x_user_id)) \
+            .order("created_at", desc=True) \
+            .execute()
+        
+        logger.info(f"{len(response.data)} document(s) trouvé(s).")
+        return response.data
+        
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Erreur lors de la récupération depuis Supabase: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Erreur lors de la récupération des données : {str(e)}"
+        )
+
+# Montage d'un dossier static si besoin (pour l'instant, on n'a que index.html)
+# app.mount("/static", StaticFiles(directory="static"), name="static")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    # Le reload automatique est activé
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

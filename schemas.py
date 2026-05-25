@@ -8,24 +8,27 @@ from pydantic import BaseModel, Field, ConfigDict
 class DocumentUploadSchema(BaseModel):
     """
     Schéma de validation pour la création d'un nouveau document médical.
-    Le client envoie les données en clair, le serveur se chargera de les chiffrer.
+    Le client envoie les données DEJA CHIFFRÉES (Zero-Knowledge).
     """
-    title: str = Field(
+    encrypted_title: str = Field(
         ...,
         min_length=1,
-        description="Le titre du document en clair.",
-        examples=["Bilan sanguin"]
+        description="Le titre du document chiffré par le client (Base64)."
     )
-    content: str = Field(
+    encrypted_content: str = Field(
         ...,
         min_length=1,
-        description="Le contenu textuel du document médical en clair.",
-        examples=["Le patient présente un taux de fer un peu bas..."]
+        description="Le contenu du document chiffré par le client (Base64)."
+    )
+    encrypted_dek: str = Field(
+        ...,
+        min_length=1,
+        description="La clé DEK chiffrée par la KEK du client (Base64)."
     )
 
 class DocumentResponseSchema(BaseModel):
     """
-    Schéma de retour d'un document médical (déchiffré par le serveur).
+    Schéma de retour d'un document médical (toujours chiffré).
     """
     id: UUID = Field(
         ...,
@@ -35,13 +38,17 @@ class DocumentResponseSchema(BaseModel):
         ...,
         description="L'UUID de l'utilisateur propriétaire du document."
     )
-    title: str = Field(
+    encrypted_title: str = Field(
         ...,
-        description="Le titre du document déchiffré."
+        description="Le titre du document chiffré."
     )
-    content: str = Field(
+    encrypted_content: str = Field(
         ...,
-        description="Le contenu du document déchiffré."
+        description="Le contenu du document chiffré."
+    )
+    encrypted_dek: str = Field(
+        ...,
+        description="La clé DEK chiffrée."
     )
     created_at: datetime = Field(
         ...,

@@ -1,22 +1,23 @@
 <div align="center">
   <h1>⚕️ MedVault Pro</h1>
-  <p><strong>Plateforme de Stockage Médical Sécurisée — Chiffrement AES côté Serveur</strong></p>
+  <p><strong>Plateforme de Stockage Médical Zéro-Connaissance — Chiffrement Côté Client</strong></p>
   <br/>
+  <img src="https://img.shields.io/badge/Architecture-Z%C3%A9ro--Connaissance-8A2BE2?style=flat-square" alt="Zero-Knowledge">
+  <img src="https://img.shields.io/badge/Chiffrement-AES--256--GCM%20(Client)-critical?style=flat-square" alt="Encryption">
   <img src="https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white" alt="Python">
   <img src="https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi" alt="FastAPI">
   <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ecf8e?style=flat-square&logo=supabase" alt="Supabase">
-  <img src="https://img.shields.io/badge/Chiffrement-AES--128--CBC%20%2B%20HMAC--SHA256-critical?style=flat-square" alt="Encryption">
-  <img src="https://img.shields.io/badge/Encodage-Base64%20(Fernet)-orange?style=flat-square" alt="Base64">
-  <img src="https://img.shields.io/badge/Status-Production%20Ready-success?style=flat-square" alt="Status">
 </div>
 
 ---
 
 ## 🎯 Description
 
-**MedVault Pro** est une application web de stockage de dossiers médicaux sécurisée. Elle illustre comment un serveur backend peut chiffrer des données sensibles **avant** de les persister en base de données, garantissant qu'un accès direct à Supabase ne révèle aucune information lisible.
+**MedVault Pro** est une application web de stockage de dossiers médicaux sécurisée implémentant une architecture **Zéro-Connaissance (Zero-Knowledge)**. 
 
-> **Contexte pédagogique :** Ce projet démontre les principes fondamentaux du chiffrement symétrique (AES), de l'encodage Base64, et de la sécurisation des données au repos (*data at rest encryption*).
+Le chiffrement est intégralement réalisé **côté client (dans le navigateur)** avant que les données ne soient transmises au serveur. L'API FastAPI et la base de données Supabase ne voient et ne stockent que des données chiffrées (Base64) et n'ont **absolument aucun moyen** de les déchiffrer.
+
+> **Exigence du Projet :** Ce projet démontre comment concevoir une API REST qui stocke des documents médicaux où le contenu est chiffré côté client, garantissant qu'une compromission du serveur ne fuite aucune donnée patient en clair.
 
 ---
 
@@ -24,84 +25,43 @@
 
 | Fonctionnalité | Description |
 |---|---|
-| 🔐 **Chiffrement AES côté serveur** | Le module Python `crypto.py` chiffre titre et contenu via **Fernet** (AES-128-CBC + HMAC-SHA256) avant l'insertion en base |
-| 📄 **Encodage Base64** | Les données chiffrées sont stockées au format Base64 URL-safe — un standard d'encodage binaire-vers-texte |
-| 🔬 **Inspecteur en temps réel** | L'onglet "Inspecteur" compare côte-à-côte ce que voit Supabase (Base64 chiffré) vs. ce que renvoie l'API (texte clair) |
-| 🧪 **Génération de données de test** | Un bouton génère 3 dossiers médicaux réalistes en un clic pour la démonstration |
-| ⚡ **Générateur d'ID aléatoire** | Démontre l'utilisation de `crypto.getRandomValues()` du navigateur pour générer des identifiants cryptographiquement sûrs |
-| 🏥 **Affichage Dossier Médical** | Les documents déchiffrés s'affichent dans une fiche médicale stylisée avec tampon "TRÈS CONFIDENTIEL" |
+| 🔐 **Chiffrement Côté Client (Web Crypto API)** | Le navigateur chiffre localement le titre et le contenu (AES-256-GCM) avant tout envoi réseau |
+| 🔑 **Enveloppe Cryptographique (KEK/DEK)** | Utilisation d'une clé de chiffrement de clé (KEK) dérivée du mot de passe via SHA-256, protégeant une clé de données unique (DEK) par document |
+| 📄 **Zéro-Connaissance** | L'API REST ne reçoit que des chaînes Base64 et n'a pas accès au mot de passe de l'utilisateur |
+| 🔬 **Inspecteur de Déchiffrement Local** | Permet de visualiser le processus de dérivation (KEK), déchiffrement de clé (DEK), et déchiffrement des données localement |
+| 🧪 **Générateur de Tests** | Génère automatiquement des clés et chiffre 3 dossiers de démonstration côté client pour remplir la base |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture Cryptographique (Web Crypto API)
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    NAVIGATEUR WEB                       │
-│                   (index.html)                          │
+│               NAVIGATEUR WEB (Client)                   │
 │                                                         │
-│  Formulaire → Données en CLAIR → Requête HTTP POST     │
+│ 1. Saisie: Mot de passe + Titre + Contenu               │
+│ 2. Dérivation KEK = SHA-256(Mot de passe)               │
+│ 3. Génération DEK = 256 bits aléatoires                 │
+│ 4. Chiffrement Titre/Contenu avec DEK (AES-GCM)         │
+│ 5. Chiffrement DEK avec KEK (AES-GCM)                   │
+│ 6. Envoi réseau POST /api/documents                     │
 └─────────────────────┬───────────────────────────────────┘
-                      │ {title: "...", content: "..."}
+                      │ (Données 100% chiffrées en Base64)
                       ▼
 ┌─────────────────────────────────────────────────────────┐
-│              SERVEUR FASTAPI (main.py)                  │
+│              SERVEUR FASTAPI (Passe-plat)               │
 │                                                         │
-│  1. Reçoit les données en clair                         │
-│  2. Appelle ServerCrypto.encrypt_text() → crypto.py     │
-│     ├── Fernet(MASTER_KEY).encrypt(data)                │
-│     └── → Base64 URL-safe (ex: gAAAAABh...)             │
-│  3. Envoie le texte chiffré à Supabase                  │
+│ Ne fait QUE valider le format et stocker dans la DB.    │
+│ Aucune opération cryptographique n'est faite ici.       │
 └─────────────────────┬───────────────────────────────────┘
-                      │ {encrypted_title: "gAAAAABh...",
-                      │  encrypted_content: "gAAAAABh..."}
                       ▼
 ┌─────────────────────────────────────────────────────────┐
 │             SUPABASE (PostgreSQL)                       │
 │                                                         │
-│  Stocke uniquement des chaînes Base64 illisibles       │
-│  → Accès direct à la DB = données incompréhensibles    │
+│ Colonnes: encrypted_title, encrypted_content,           │
+│           encrypted_dek                                 │
 └─────────────────────────────────────────────────────────┘
 ```
-
-### Flux de Déchiffrement
-
-```
-Supabase → encrypted_title (Base64) → FastAPI
-         → Fernet.decrypt() → texte clair
-         → Réponse JSON lisible → Navigateur
-```
-
----
-
-## 🔑 Cryptographie Utilisée
-
-### Fernet (librairie `cryptography`)
-
-Fernet est une **implémentation de chiffrement symétrique authentifié** qui garantit :
-
-- **Confidentialité** : AES-128 en mode CBC
-- **Intégrité** : HMAC avec SHA-256 (protection contre l'altération)
-- **Encodage** : Base64 URL-safe (pour stockage en base de données texte)
-
-```python
-# crypto.py — Exemple simplifié
-from cryptography.fernet import Fernet
-
-fernet = Fernet(MASTER_KEY)
-
-# Chiffrement
-cipher_b64 = fernet.encrypt(b"Bilan sanguin normal")
-# → b'gAAAAABh5v3...longue_chaine_base64...'
-
-# Déchiffrement
-plain = fernet.decrypt(cipher_b64)
-# → b'Bilan sanguin normal'
-```
-
-### Pourquoi Base64 ?
-
-Base64 encode des données binaires (octets aléatoires du chiffrement) en caractères ASCII imprimables. C'est nécessaire pour stocker le résultat d'un algorithme de chiffrement dans une colonne `TEXT` d'une base de données PostgreSQL.
 
 ---
 
@@ -119,17 +79,11 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configurer l'environnement
-Créer un fichier `.env` :
+Créer un fichier `.env` à la racine :
 ```env
 SUPABASE_URL=https://votre-projet.supabase.co
 SUPABASE_ANON_KEY=votre-cle-anon
-ENCRYPTION_MASTER_KEY=votre-cle-fernet-base64-32-octets
 ```
-
-> **Générer une clé Fernet :**
-> ```python
-> python -c "import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())"
-> ```
 
 ### 3. Initialiser la base de données
 Exécuter le fichier `migration.sql` dans le **SQL Editor** de votre projet Supabase.
@@ -146,38 +100,26 @@ Ouvrir `http://127.0.0.1:8000` dans votre navigateur.
 
 ```
 chiffrement/
-├── main.py           # API FastAPI (endpoints + logique chiffrement)
-├── crypto.py         # Module ServerCrypto (Fernet/AES)
-├── config.py         # Chargement et validation des variables d'environnement
+├── main.py           # API FastAPI (Zéro-Connaissance, aucun chiffrement)
+├── config.py         # Configuration (Variables d'environnement)
 ├── database.py       # Client Supabase
-├── schemas.py        # Schémas Pydantic (validation des données)
-├── migration.sql     # Script SQL d'initialisation de la table
+├── schemas.py        # Schémas Pydantic (validation des données chiffrées)
+├── migration.sql     # Script SQL (Table public.medical_documents)
 ├── requirements.txt  # Dépendances Python
-├── index.html        # Interface web complète (SPA)
-└── .env              # Variables d'environnement (ne pas versionner)
+└── index.html        # Interface SPA (Contient toute la logique cryptographique)
 ```
 
 ---
 
 ## 🌐 Endpoints API
 
+L'API est conçue pour être "stupide" et sécurisée : elle ne manipule que de la donnée opaque.
+
 | Méthode | Route | Description |
 |---|---|---|
 | `GET` | `/` | Sert l'interface web |
-| `POST` | `/api/documents` | Chiffre et sauvegarde un document |
-| `GET` | `/api/documents` | Récupère et déchiffre les documents |
-| `GET` | `/api/documents/raw` | **[Pédagogique]** Données brutes chiffrées (Base64) telles que stockées en DB |
-| `GET` | `/api/users` | Liste les profils utilisateurs |
-
-> Accéder à la documentation interactive : `http://127.0.0.1:8000/docs`
-
----
-
-## 🔒 Conformité et Normes
-
-- **AES (Advanced Encryption Standard)** : Standard NIST approuvé pour le chiffrement des données de santé (HIPAA, HDS)
-- **HMAC-SHA256** : Assure l'intégrité des données (détection de toute altération)
-- **Base64** : Encodage standard RFC 4648
+| `POST` | `/api/documents` | Reçoit et stocke un document chiffré (`encrypted_title`, `encrypted_content`, `encrypted_dek`) |
+| `GET` | `/api/documents` | Renvoie la liste des documents chiffrés à l'utilisateur |
 
 ---
 

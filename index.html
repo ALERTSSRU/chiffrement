@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedVault Pro - Espace Médical Sécurisé</title>
+    <title>MedVault Pro - Zéro-Connaissance</title>
     
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -19,10 +20,13 @@
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
+            
+            /* Medical Neon Theme */
             --cyan-glow: #00f2fe;
             --purple-glow: #9b51e0;
             --emerald-glow: #05c46b;
             --rose-glow: #ff5e57;
+            
             --gradient-primary: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
             --gradient-purple: linear-gradient(135deg, #9b51e0 0%, #7028e4 100%);
             --gradient-emerald: linear-gradient(135deg, #05c46b 0%, #0be881 100%);
@@ -45,229 +49,70 @@
 
         .container { max-width: 1300px; margin: 0 auto; padding: 0 24px; }
 
-        header {
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-primary);
-            background: rgba(10, 14, 23, 0.8);
-            backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
+        /* Header Navigation */
+        header { padding: 20px 0; border-bottom: 1px solid var(--border-primary); background: rgba(10, 14, 23, 0.8); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
-
         .logo-container { display: flex; align-items: center; gap: 10px; }
-
-        .logo-icon {
-            width: 32px; height: 32px;
-            background: var(--gradient-primary);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            color: #000; font-weight: 800;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-            animation: pulse 3s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); }
-            100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
-        }
-
-        .logo-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 22px; font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: rgba(18, 26, 43, 0.6);
-            border: 1px solid var(--border-primary);
-            padding: 4px; border-radius: 30px; gap: 5px;
-        }
-
-        .tab-btn {
-            background: transparent; border: none;
-            color: var(--text-secondary);
-            padding: 8px 20px; border-radius: 25px;
-            font-size: 13px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        .tab-btn.active {
-            background: var(--gradient-primary);
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
-        }
-
+        .logo-icon { width: 32px; height: 32px; background: var(--gradient-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); animation: pulse 3s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); } 50% { box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); } 100% { box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); } }
+        .logo-text { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 0.5px; }
+        
+        .nav-tabs { display: flex; background: rgba(18, 26, 43, 0.6); border: 1px solid var(--border-primary); padding: 4px; border-radius: 30px; gap: 5px; }
+        .tab-btn { background: transparent; border: none; color: var(--text-secondary); padding: 8px 20px; border-radius: 25px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 8px; text-transform: none; letter-spacing: 0px; flex: none; }
+        .tab-btn.active { background: var(--gradient-primary); color: #000; box-shadow: 0 0 15px rgba(0, 242, 254, 0.25); }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .status-message {
-            padding: 16px 20px; border-radius: 12px; font-size: 14px; font-weight: 500;
-            margin: 20px 0; display: none; backdrop-filter: blur(10px);
-            align-items: center; gap: 12px; animation: slideDown 0.3s ease;
-        }
-        .status-message.success { background: rgba(5, 196, 107, 0.1); border: 1px solid var(--emerald-glow); color: #0be881; }
-        .status-message.error { background: rgba(255, 94, 87, 0.1); border: 1px solid var(--rose-glow); color: #ff5e57; }
+        /* Status Banner */
+        .status-message { padding: 16px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; margin: 20px 0; display: none; backdrop-filter: blur(10px); align-items: center; gap: 12px; animation: slideDown 0.3s ease; }
+        .status-message.success { background: rgba(5, 196, 107, 0.1); border: 1px solid var(--emerald-glow); color: #0be881; box-shadow: 0 0 15px rgba(5, 196, 107, 0.1); }
+        .status-message.error { background: rgba(255, 94, 87, 0.1); border: 1px solid var(--rose-glow); color: #ff5e57; box-shadow: 0 0 15px rgba(255, 94, 87, 0.1); }
         .status-message.show { display: flex; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Grid Layout */
+        .main-layout { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; margin-top: 30px; margin-bottom: 50px; }
 
-        .main-layout {
-            display: grid; grid-template-columns: 1.1fr 0.9fr;
-            gap: 32px; margin-top: 30px; margin-bottom: 50px;
-        }
-
-        .glass-card {
-            background: var(--bg-surface); backdrop-filter: blur(16px);
-            border: 1px solid var(--border-primary); border-radius: 16px;
-            padding: 30px; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .glass-card::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            width: 100%; height: 4px;
-            background: var(--gradient-primary); opacity: 0.7;
-        }
-
+        /* Cards and Elements */
+        .glass-card { background: var(--bg-surface); backdrop-filter: blur(16px); border: 1px solid var(--border-primary); border-radius: 16px; padding: 30px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); transition: border-color 0.3s, box-shadow 0.3s; }
+        .glass-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--gradient-primary); opacity: 0.7; }
         .glass-card.purple-theme::before { background: var(--gradient-purple); }
-
-        .glass-card:hover {
-            border-color: rgba(0, 242, 254, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.05);
-        }
-
+        .glass-card:hover { border-color: rgba(0, 242, 254, 0.3); box-shadow: 0 15px 35px rgba(0, 242, 254, 0.05); }
         .card-header { margin-bottom: 24px; }
-
-        .card-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 22px; font-weight: 700; letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        .card-title span {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
+        .card-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
+        .card-title span { background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .card-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
 
+        /* Forms styles */
         .form-grid { display: flex; flex-direction: column; gap: 20px; }
-
         .form-group { display: flex; flex-direction: column; gap: 8px; }
-
-        .form-group label {
-            font-size: 12px; font-weight: 700; color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            background: rgba(10, 14, 23, 0.6);
-            border: 1px solid var(--border-primary);
-            border-radius: 10px; padding: 14px 16px;
-            color: var(--text-primary); font-family: inherit;
-            font-size: 14px; transition: all 0.3s;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--border-focus);
-            background: rgba(10, 14, 23, 0.9);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
-        }
-
+        .form-group label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; background: rgba(10, 14, 23, 0.6); border: 1px solid var(--border-primary); border-radius: 10px; padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 14px; transition: all 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--border-focus); background: rgba(10, 14, 23, 0.9); box-shadow: 0 0 15px rgba(0, 242, 254, 0.15); }
         .form-group textarea { resize: vertical; min-height: 120px; }
-
         .btn-flex-row { display: flex; gap: 12px; }
         .btn-flex-row .form-group { flex: 1; }
 
-        button {
-            border: none; border-radius: 10px; padding: 14px 24px;
-            font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
-            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-flex; align-items: center; justify-content: center;
-            gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
-        .btn-glow-primary {
-            background: var(--gradient-primary); color: #0a0e17;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
-        }
+        button { border: none; border-radius: 10px; padding: 14px 24px; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-glow-primary { background: var(--gradient-primary); color: #0a0e17; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25); }
         .btn-glow-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45); }
-
-        .btn-glow-purple {
-            background: var(--gradient-purple); color: white;
-            box-shadow: 0 4px 15px rgba(155, 81, 224, 0.25);
-        }
+        .btn-glow-purple { background: var(--gradient-purple); color: white; box-shadow: 0 4px 15px rgba(155, 81, 224, 0.25); }
         .btn-glow-purple:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(155, 81, 224, 0.45); }
-
-        .btn-outline {
-            background: rgba(18, 26, 43, 0.3); color: var(--text-primary);
-            border: 1px solid var(--border-primary);
-        }
+        .btn-outline { background: rgba(18, 26, 43, 0.3); color: var(--text-primary); border: 1px solid var(--border-primary); }
         .btn-outline:hover { background: rgba(18, 26, 43, 0.7); border-color: var(--text-secondary); }
+        .btn-key-generate { height: 48px; border-radius: 10px; background: var(--gradient-purple); color: white; padding: 0 16px; font-size: 12px; margin-left: 10px; box-shadow: 0 4px 10px rgba(155, 81, 224, 0.15); }
 
-        .btn-key-generate {
-            height: 48px; border-radius: 10px;
-            background: var(--gradient-purple); color: white;
-            padding: 0 16px; font-size: 12px; margin-left: 10px;
-            box-shadow: 0 4px 10px rgba(155, 81, 224, 0.15);
-        }
-
+        /* Sidebar Guide Cards */
         .guide-flow { display: flex; flex-direction: column; gap: 16px; }
-
-        .guide-step {
-            display: flex; gap: 16px; padding: 16px;
-            background: rgba(10, 14, 23, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 12px; transition: all 0.3s;
-        }
+        .guide-step { display: flex; gap: 16px; padding: 16px; background: rgba(10, 14, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.3s; }
         .guide-step:hover { background: rgba(18, 26, 43, 0.5); border-color: var(--border-glow); transform: translateX(5px); }
-
-        .guide-number {
-            width: 32px; height: 32px;
-            background: rgba(0, 242, 254, 0.1);
-            border: 1px solid rgba(0, 242, 254, 0.3);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: var(--cyan-glow); font-family: 'Outfit', sans-serif;
-            font-weight: 700; font-size: 14px; flex-shrink: 0;
-        }
-
+        .guide-number { width: 32px; height: 32px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--cyan-glow); font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; flex-shrink: 0; }
         .guide-text h4 { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
         .guide-text p { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
 
-        .glowing-console {
-            background: #05080f; border: 1px solid var(--border-primary);
-            border-radius: 12px; padding: 20px;
-            font-family: 'JetBrains Mono', monospace; font-size: 11px;
-            height: 200px; overflow-y: auto; margin-top: 24px;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); position: relative;
-        }
-
-        .glowing-console::before {
-            content: "CRYPTO SHELL v2.0 — Server-Side AES";
-            position: absolute; top: 4px; right: 12px;
-            font-size: 8px; color: var(--text-muted); letter-spacing: 1px;
-        }
-
+        .glowing-console { background: #05080f; border: 1px solid var(--border-primary); border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; height: 180px; overflow-y: auto; margin-top: 24px; box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); position: relative; }
+        .glowing-console::before { content: "CLIENT CRYPTO SHELL v2.0"; position: absolute; top: 4px; right: 12px; font-size: 8px; color: var(--text-muted); letter-spacing: 1px; }
         .console-line { margin-bottom: 6px; display: flex; gap: 8px; }
         .console-time { color: var(--text-muted); }
         .console-msg { color: #0be881; word-break: break-all; }
@@ -275,129 +120,45 @@
         .console-msg.error { color: #ff5e57; }
         .console-msg.warning { color: #ffd32a; }
 
+        /* Stored Documents Section */
         .documents-section { margin-top: 40px; margin-bottom: 80px; }
-
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-
-        .documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; }
-
-        .doc-card {
-            background: var(--bg-surface); border: 1px solid var(--border-primary);
-            border-radius: 16px; padding: 24px;
-            display: flex; flex-direction: column; gap: 16px;
-            position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
+        .documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
+        .doc-card { background: var(--bg-surface); border: 1px solid var(--border-primary); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); cursor: pointer; }
         .doc-card:hover { border-color: var(--cyan-glow); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 242, 254, 0.1); }
-
-        .doc-badge {
-            position: absolute; top: 24px; right: 24px;
-            background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4);
-            color: var(--cyan-glow); font-size: 9px; font-weight: 700;
-            padding: 4px 8px; border-radius: 20px; text-transform: uppercase;
-            letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;
-        }
-
-        .doc-card-title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-primary); padding-right: 80px; }
-
-        .doc-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; }
-
-        /* NEW: Shows encrypted Base64 data from DB */
-        .doc-encrypted-preview {
-            background: rgba(10, 14, 23, 0.5); border-radius: 8px; padding: 12px;
-            font-family: 'JetBrains Mono', monospace; font-size: 10px;
-            color: #ffd32a; word-break: break-all; height: 70px;
-            overflow: hidden; position: relative;
-        }
-        .doc-encrypted-preview::before {
-            content: "⚠ DONNÉES CHIFFRÉES EN BASE DE DONNÉES (Fernet/AES)";
-            display: block; font-size: 8px; color: var(--text-muted);
-            letter-spacing: 0.8px; margin-bottom: 6px; font-weight: 700;
-        }
-        .doc-encrypted-preview::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 25px;
-            background: linear-gradient(180deg, transparent, rgba(10, 14, 23, 0.95));
-        }
-
-        .doc-decrypted-badge {
-            background: rgba(5, 196, 107, 0.1); border: 1px solid rgba(5, 196, 107, 0.3);
-            border-radius: 8px; padding: 8px 12px;
-            font-size: 12px; color: #0be881;
-        }
-        .doc-decrypted-badge strong { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-
+        .doc-badge { position: absolute; top: 24px; right: 24px; background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); color: var(--cyan-glow); font-size: 9px; font-weight: 700; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+        .doc-card-title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-primary); padding-right: 70px; word-break: break-all; }
+        .doc-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 0; }
+        
+        .doc-encrypted-preview { background: rgba(10, 14, 23, 0.5); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary); word-break: break-all; height: 70px; overflow-y: hidden; position: relative; border: 1px dashed rgba(255, 255, 255, 0.1); }
+        .doc-encrypted-preview::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(180deg, transparent 0%, rgba(10, 14, 23, 0.9) 100%); }
+        
         .doc-actions { display: flex; gap: 10px; margin-top: auto; }
         .doc-actions button { flex: 1; padding: 10px 16px; font-size: 12px; }
 
-        .empty-state {
-            grid-column: 1 / -1; text-align: center; padding: 60px 40px;
-            background: rgba(18, 26, 43, 0.3); border: 1px dashed var(--border-primary);
-            border-radius: 16px; color: var(--text-secondary);
-        }
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 40px; background: rgba(18, 26, 43, 0.3); border: 1px dashed var(--border-primary); border-radius: 16px; color: var(--text-secondary); }
         .empty-state-icon { font-size: 40px; color: var(--text-muted); margin-bottom: 16px; }
 
-        /* VAULT TAB */
-        .vault-container { max-width: 1000px; margin: 30px auto 80px auto; display: flex; flex-direction: column; gap: 30px; }
-
-        .search-vault-box {
-            display: flex; gap: 12px;
-            background: var(--bg-surface); border: 1px solid var(--border-primary);
-            padding: 16px; border-radius: 16px; align-items: center;
-        }
+        /* VAULT SCREEN - DEDICATED DECRYPTION PAGE */
+        .vault-container { max-width: 900px; margin: 30px auto 80px auto; display: flex; flex-direction: column; gap: 30px; }
+        .search-vault-box { display: flex; gap: 12px; background: var(--bg-surface); border: 1px solid var(--border-primary); padding: 16px; border-radius: 16px; align-items: center; }
         .search-vault-box input { flex: 1; background: transparent; border: none; color: white; font-family: inherit; font-size: 15px; }
         .search-vault-box input:focus { outline: none; }
 
-        .crypto-process-card {
-            background: #080c14; border: 1px solid var(--border-primary);
-            border-radius: 16px; padding: 24px;
-            display: flex; flex-direction: column; gap: 16px;
-        }
-
-        .process-title {
-            font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700;
-            letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary);
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px;
-        }
-
+        .crypto-process-card { background: #080c14; border: 1px solid var(--border-primary); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .process-title { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px; }
         .step-indicators { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-
-        .step-ind {
-            background: rgba(18, 26, 43, 0.5); border: 1px solid var(--border-primary);
-            border-radius: 12px; padding: 16px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            gap: 10px; opacity: 0.5; transition: all 0.4s;
-        }
+        .step-ind { background: rgba(18, 26, 43, 0.5); border: 1px solid var(--border-primary); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; opacity: 0.5; transition: all 0.4s; }
         .step-ind.active { opacity: 1; border-color: var(--cyan-glow); box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); }
         .step-ind.success { opacity: 1; border-color: var(--emerald-glow); background: rgba(5, 196, 107, 0.05); }
-
-        .step-ind-circle {
-            width: 24px; height: 24px; border-radius: 50%;
-            border: 2px solid var(--text-muted);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: 700; color: var(--text-muted); transition: all 0.3s;
-        }
+        .step-ind-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
         .step-ind.active .step-ind-circle { border-color: var(--cyan-glow); color: var(--cyan-glow); box-shadow: 0 0 8px rgba(0, 242, 254, 0.4); animation: pulse-border 1.5s infinite; }
-        @keyframes pulse-border { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes pulse-border { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .step-ind.success .step-ind-circle { background: var(--emerald-glow); border-color: var(--emerald-glow); color: #000; }
         .step-ind-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
         .step-ind-desc { font-size: 10px; color: var(--text-secondary); }
 
-        /* Comparison panel */
-        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
-
-        .compare-panel {
-            border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
-        }
-        .compare-panel.encrypted-panel { background: rgba(255, 211, 42, 0.05); border: 1px solid rgba(255, 211, 42, 0.25); }
-        .compare-panel.decrypted-panel { background: rgba(5, 196, 107, 0.05); border: 1px solid rgba(5, 196, 107, 0.25); }
-        .compare-panel-title { font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
-        .encrypted-panel .compare-panel-title { color: #ffd32a; }
-        .decrypted-panel .compare-panel-title { color: #0be881; }
-        .compare-field-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; font-weight: 700; }
-        .compare-field-value { font-family: 'JetBrains Mono', monospace; font-size: 11px; word-break: break-all; line-height: 1.5; }
-        .encrypted-panel .compare-field-value { color: #ffd32a; }
-        .decrypted-panel .compare-field-value { color: #0be881; }
-
+        /* GORGEOUS MEDICAL DOSSIER LAYOUT */
         .medical-dossier-card {
             background: #fff; color: #1e293b; border-radius: 16px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3); padding: 40px;
@@ -445,7 +206,6 @@
             .main-layout { grid-template-columns: 1fr; gap: 24px; }
             .documents-grid { grid-template-columns: 1fr; }
             .step-indicators { grid-template-columns: 1fr; }
-            .comparison-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -484,15 +244,15 @@
                     <div class="glass-card">
                         <div class="card-header">
                             <h2 class="card-title">🔐 Terminal de <span>Transmission Sécurisée</span></h2>
-                            <p class="card-subtitle">Chiffrement AES côté serveur (Fernet) — Serveur Python gère la sécurité</p>
+                            <p class="card-subtitle">Chiffrement Zéro-Connaissance (Côté Client) — L'API ne voit rien en clair</p>
                         </div>
                         
                         <div class="form-grid">
-                            <!-- Password / Session ID Generator -->
+                            <!-- Password Generator -->
                             <div class="form-group btn-flex-row">
                                 <div style="flex:1;">
-                                    <label for="sessionId">ID de Session / Démo</label>
-                                    <input type="text" id="sessionId" placeholder="Cliquez Générer pour créer un ID de démonstration" readonly>
+                                    <label for="masterKey">Mot de Passe (Clé Maîtresse KEK)</label>
+                                    <input type="password" id="masterKey" placeholder="Entrez un mot de passe ou générez-en un">
                                 </div>
                                 <button class="btn-key-generate btn-glow-purple" onclick="generateAndCopyPassword()" style="margin-top:23px;">
                                     ⚡ Générer
@@ -517,7 +277,7 @@
                             
                             <div class="btn-flex-row">
                                 <button class="btn-glow-primary" onclick="submitDocument()" style="flex:1.5;">
-                                    🔒 Chiffrer &amp; Transmettre
+                                    🔒 Chiffrer localement &amp; Transmettre
                                 </button>
                                 <button class="btn-outline" onclick="clearForm()" style="flex:0.5;">
                                     Réinitialiser
@@ -535,37 +295,37 @@
                 <div>
                     <div class="glass-card purple-theme" style="height:100%;">
                         <div class="card-header">
-                            <h3 class="card-title">📡 Flux <span>Cryptographique Serveur</span></h3>
-                            <p class="card-subtitle">Comment vos données médicales sont sécurisées</p>
+                            <h3 class="card-title">📡 Flux <span>Cryptographique Client</span></h3>
+                            <p class="card-subtitle">Comment vos données médicales sont sécurisées (Zéro-Connaissance)</p>
                         </div>
                         
                         <div class="guide-flow">
                             <div class="guide-step">
                                 <div class="guide-number">1</div>
                                 <div class="guide-text">
-                                    <h4>Saisie en Clair (Client)</h4>
-                                    <p>Vous saisissez le titre et le contenu médical dans l'interface. Les données partent en texte clair vers l'API FastAPI.</p>
+                                    <h4>Chiffrement Local (Navigateur)</h4>
+                                    <p>Votre navigateur chiffre le titre et le contenu (AES-GCM) avec une clé générée localement. Votre mot de passe protège cette clé.</p>
                                 </div>
                             </div>
                             <div class="guide-step">
                                 <div class="guide-number">2</div>
                                 <div class="guide-text">
-                                    <h4>Chiffrement Fernet/AES (Serveur Python)</h4>
-                                    <p>Le serveur <strong>crypto.py</strong> chiffre les données avec la clé maîtresse (AES-128-CBC + HMAC-SHA256). La donnée devient du Base64 illisible.</p>
+                                    <h4>Transmission Sécurisée</h4>
+                                    <p>Les données envoyées à l'API FastAPI sont DÉJÀ chiffrées (Base64). Le serveur ne voit jamais le texte en clair.</p>
                                 </div>
                             </div>
                             <div class="guide-step">
                                 <div class="guide-number">3</div>
                                 <div class="guide-text">
-                                    <h4>Stockage Opaque (Supabase)</h4>
-                                    <p>Supabase stocke uniquement le texte chiffré en Base64. Même un accès direct à la base de données ne révèle rien.</p>
+                                    <h4>Stockage Zéro-Connaissance (Supabase)</h4>
+                                    <p>Supabase stocke le texte chiffré. Même l'administrateur de la base de données ne peut pas lire vos dossiers.</p>
                                 </div>
                             </div>
                             <div class="guide-step">
                                 <div class="guide-number">4</div>
                                 <div class="guide-text">
-                                    <h4>Déchiffrement à la Lecture (Serveur)</h4>
-                                    <p>À la récupération, le serveur déchiffre les données et les retourne en clair au client autorisé.</p>
+                                    <h4>Déchiffrement (Inspecteur)</h4>
+                                    <p>À la récupération, l'API renvoie le Base64. C'est vous (le client) qui déchiffrez avec votre mot de passe.</p>
                                 </div>
                             </div>
                         </div>
@@ -573,7 +333,7 @@
                         <div class="glowing-console" id="console">
                             <div class="console-line">
                                 <span class="console-time">[--:--:--]</span>
-                                <span class="console-msg info">Système MedVault opérationnel. Chiffrement AES Fernet côté serveur actif.</span>
+                                <span class="console-msg info">Système MedVault opérationnel. Chiffrement AES Client actif.</span>
                             </div>
                         </div>
                     </div>
@@ -583,7 +343,7 @@
             <!-- Documents Section -->
             <div class="documents-section" id="documents">
                 <div class="section-header">
-                    <h2 class="card-title">📂 Dossiers Médicaux <span>Sauvegardés</span></h2>
+                    <h2 class="card-title">📂 Dossiers Médicaux <span>Sauvegardés (Chiffrés)</span></h2>
                     <button class="btn-outline" onclick="fetchDocuments()" style="padding:10px 20px; font-size:12px;">
                         ↻ Actualiser
                     </button>
@@ -603,68 +363,42 @@
             <div class="vault-container">
                 <div class="glass-card">
                     <div class="card-header">
-                        <h2 class="card-title">🔬 Inspecteur de <span>Chiffrement (Démonstration)</span></h2>
-                        <p class="card-subtitle">Comparez les données telles qu'elles sont stockées en base (chiffrées) vs. ce que l'API renvoie (déchiffrées)</p>
+                        <h2 class="card-title">🔬 Inspecteur de <span>Déchiffrement Local</span></h2>
+                        <p class="card-subtitle">Récupérez les données chiffrées depuis l'API et déchiffrez-les avec votre mot de passe</p>
                     </div>
 
                     <div class="search-vault-box">
+                        <span style="font-size:18px;">🔑</span>
+                        <input type="password" id="vaultMasterKey" placeholder="Entrez la clé maîtresse (mot de passe) pour déchiffrer">
+                    </div>
+
+                    <div class="search-vault-box" style="margin-top: 10px;">
                         <span style="font-size:18px;">🔍</span>
-                        <input type="text" id="vaultDocId" placeholder="Collez l'UUID du document médical ou cliquez sur un document depuis le Dashboard" oninput="onVaultDocIdChanged()">
+                        <input type="text" id="vaultDocId" placeholder="Collez l'UUID du document médical (ou cliquez depuis le Dashboard)">
                         <button class="btn-outline" onclick="inspectDocument()" style="padding:10px 16px; font-size:12px; border-radius:8px;">
-                            Inspecter
+                            Déchiffrer
                         </button>
                     </div>
                 </div>
 
                 <!-- Stage tracker -->
                 <div class="crypto-process-card" id="cryptoProcessTracker" style="display:none;">
-                    <div class="process-title">🔄 Flux de Déchiffrement Serveur</div>
+                    <div class="process-title">🔄 Flux de Déchiffrement Côté Client</div>
                     <div class="step-indicators">
-                        <div class="step-ind" id="stepFetch">
+                        <div class="step-ind" id="stepKEK">
                             <div class="step-ind-circle">1</div>
-                            <div class="step-ind-label">Requête DB Brute</div>
-                            <div class="step-ind-desc">Récupération des données chiffrées</div>
+                            <div class="step-ind-label">Dérivation KEK</div>
+                            <div class="step-ind-desc">SHA-256 sur mot de passe</div>
                         </div>
-                        <div class="step-ind" id="stepDecrypt">
+                        <div class="step-ind" id="stepDEK">
                             <div class="step-ind-circle">2</div>
-                            <div class="step-ind-label">Déchiffrement Fernet</div>
-                            <div class="step-ind-desc">AES-128-CBC + HMAC-SHA256</div>
+                            <div class="step-ind-label">Déchiffrement DEK</div>
+                            <div class="step-ind-desc">AES-GCM sur la clé du doc</div>
                         </div>
-                        <div class="step-ind" id="stepDisplay">
+                        <div class="step-ind" id="stepData">
                             <div class="step-ind-circle">3</div>
-                            <div class="step-ind-label">Données Claires</div>
-                            <div class="step-ind-desc">Résultat lisible pour le client</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Comparison: Encrypted DB vs Decrypted API -->
-                <div id="comparisonPanel" style="display:none;">
-                    <div class="glass-card" style="margin-bottom:0;">
-                        <h3 style="font-family:'Outfit'; margin-bottom:20px; font-size:18px;">📊 Comparaison : Base de Données vs. API</h3>
-                        <div class="comparison-grid">
-                            <div class="compare-panel encrypted-panel">
-                                <div class="compare-panel-title">⚠ Ce que voit Supabase (DB)</div>
-                                <div>
-                                    <div class="compare-field-label">encrypted_title (Base64 Fernet)</div>
-                                    <div class="compare-field-value" id="cmpEncTitle">—</div>
-                                </div>
-                                <div>
-                                    <div class="compare-field-label">encrypted_content (Base64 Fernet)</div>
-                                    <div class="compare-field-value" id="cmpEncContent">—</div>
-                                </div>
-                            </div>
-                            <div class="compare-panel decrypted-panel">
-                                <div class="compare-panel-title">✅ Ce que renvoie l'API (Déchiffré)</div>
-                                <div>
-                                    <div class="compare-field-label">title (texte clair)</div>
-                                    <div class="compare-field-value" id="cmpDecTitle">—</div>
-                                </div>
-                                <div>
-                                    <div class="compare-field-label">content (texte clair)</div>
-                                    <div class="compare-field-value" id="cmpDecContent">—</div>
-                                </div>
-                            </div>
+                            <div class="step-ind-label">Clairtext Doc</div>
+                            <div class="step-ind-desc">Déchiffrement des données</div>
                         </div>
                     </div>
                 </div>
@@ -674,7 +408,7 @@
                     <div class="dossier-confidential-stamp">TRÈS CONFIDENTIEL</div>
                     <div class="dossier-header">
                         <div class="dossier-clinic-title">⚕️ DOSSIER MÉDICAL SÉCURISÉ</div>
-                        <div class="dossier-clinic-sub">Service de Cryptographie Clinique MedVault — Chiffrement AES Côté Serveur</div>
+                        <div class="dossier-clinic-sub">Service de Cryptographie Clinique MedVault — Chiffrement Zéro-Connaissance</div>
                         <div class="dossier-meta-grid">
                             <div class="meta-field">
                                 <span class="meta-label">ID Document</span>
@@ -690,7 +424,7 @@
                             </div>
                             <div class="meta-field">
                                 <span class="meta-label">Statut du Dossier</span>
-                                <span class="meta-value" style="color:#05c46b; font-weight:700;">🔓 DÉCHIFFRÉ EN MÉMOIRE</span>
+                                <span class="meta-value" style="color:#05c46b; font-weight:700;">🔓 DÉCHIFFRÉ LOCALEMENT</span>
                             </div>
                         </div>
                     </div>
@@ -701,7 +435,7 @@
                         <div class="dossier-content-text" id="dosContentText">—</div>
                     </div>
                     <div class="dossier-footer">
-                        <div><span>Chiffrement AES côté serveur. Déchiffrement transparent via FastAPI.</span></div>
+                        <div><span>Chiffrement AES-GCM côté client. L'API FastAPI n'a jamais vu les données en clair.</span></div>
                         <div class="dossier-signature-block">
                             <span>Visa du Praticien Responsable</span>
                             <div class="dossier-signature-line"></div>
@@ -723,9 +457,7 @@
 
     <script>
         const API_URL = 'http://127.0.0.1:8000';
-        let LOADED_DOCS = [];         // Decrypted docs from /api/documents
-        let LOADED_RAW_DOCS = [];     // Raw encrypted docs from /api/documents/raw
-        let SELECTED_DOC_ID = null;
+        let LOADED_DOCS = [];         // Raw encrypted docs from /api/documents
 
         // ─── UTILITIES ───────────────────────────────────────────────
 
@@ -762,47 +494,126 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId === 'dashboard' ? 'dashboardTab' : 'vaultTab').classList.add('active');
-            document.getElementById(tabId === 'dashboard' ? 'tabBtnDashboard' : 'tabBtnVault').classList.add('active');
+            
+            if (tabId === 'dashboard') {
+                document.getElementById('dashboardTab').classList.add('active');
+                document.getElementById('tabBtnDashboard').classList.add('active');
+            } else {
+                document.getElementById('vaultTab').classList.add('active');
+                document.getElementById('tabBtnVault').classList.add('active');
+                
+                // Copy master password over to vault password field automatically
+                const mk = document.getElementById('masterKey').value;
+                if (mk) document.getElementById('vaultMasterKey').value = mk;
+            }
         }
 
-        // ─── PASSWORD / SESSION ID GENERATOR ─────────────────────────
-        // Kept as a demo feature: generates a random string to show
-        // cryptographically-secure random generation in the browser.
         function generateAndCopyPassword() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
             let id = '';
             const randomValues = crypto.getRandomValues(new Uint8Array(24));
             for (let i = 0; i < 24; i++) id += chars[randomValues[i] % chars.length];
 
-            document.getElementById('sessionId').value = id;
+            document.getElementById('masterKey').value = id;
+            document.getElementById('vaultMasterKey').value = id;
 
             navigator.clipboard.writeText(id).then(() => {
-                showStatus('ID de session généré (via crypto.getRandomValues) et copié dans le presse-papier !', 'success');
-                log(`ID de session aléatoire généré (24 octets, crypto.getRandomValues) : ${id}`, 'info');
+                showStatus('Mot de passe généré et copié dans le presse-papier !', 'success');
+                log(`Mot de passe (KEK) aléatoire généré via crypto.getRandomValues`, 'info');
             }).catch(() => {
-                showStatus('ID généré. Copiez-le manuellement.', 'success');
+                showStatus('Mot de passe généré. Copiez-le manuellement.', 'success');
             });
         }
 
         function clearForm() {
             document.getElementById('docTitle').value = '';
             document.getElementById('docContent').value = '';
-            document.getElementById('sessionId').value = '';
+            document.getElementById('masterKey').value = '';
+        }
+
+        // ─── CRYPTOGRAPHY (Web Crypto API) ───────────────────────────
+
+        async function deriveKey(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            return await crypto.subtle.digest('SHA-256', data);
+        }
+
+        async function encryptAES(text, key) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV
+            
+            const encryptKey = await crypto.subtle.importKey(
+                'raw', key, { name: 'AES-GCM' }, false, ['encrypt']
+            );
+            
+            const encrypted = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv }, encryptKey, data
+            );
+            
+            const combined = new Uint8Array(iv.length + encrypted.byteLength);
+            combined.set(iv);
+            combined.set(new Uint8Array(encrypted), iv.length);
+            
+            return btoa(String.fromCharCode.apply(null, Array.from(combined)));
+        }
+
+        async function decryptAES(ciphertext, key) {
+            try {
+                const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
+                const iv = combined.slice(0, 12);
+                const data = combined.slice(12);
+                
+                const decryptKey = await crypto.subtle.importKey(
+                    'raw', key, { name: 'AES-GCM' }, false, ['decrypt']
+                );
+                
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv }, decryptKey, data
+                );
+                
+                return new TextDecoder().decode(decrypted);
+            } catch (error) {
+                throw new Error('Échec du déchiffrement AES-GCM (mauvais mot de passe ou données altérées).');
+            }
         }
 
         // ─── SUBMIT DOCUMENT ─────────────────────────────────────────
+
         async function submitDocument() {
+            const masterKey = document.getElementById('masterKey').value.trim();
             const userId = document.getElementById('userId').value.trim();
             const title  = document.getElementById('docTitle').value.trim();
             const content = document.getElementById('docContent').value.trim();
 
+            if (!masterKey) { showStatus('Veuillez spécifier une clé maîtresse (mot de passe).', 'error'); return; }
             if (!userId) { showStatus('Veuillez saisir un UUID utilisateur.', 'error'); return; }
             if (!title || !content) { showStatus('Veuillez remplir le titre et le contenu.', 'error'); return; }
 
             try {
-                log('Envoi du dossier médical en clair vers FastAPI...');
-                log(`→ Title: "${title.substring(0, 40)}${title.length > 40 ? '...' : ''}"`, 'info');
+                log('Génération de la clé cryptographique unique du document (DEK)...');
+                const dek = crypto.getRandomValues(new Uint8Array(32)); // 256-bit DEK
+                
+                log('Chiffrement local AES-GCM du titre...');
+                const encTitle = await encryptAES(title, dek);
+                
+                log('Chiffrement local AES-GCM du contenu sensible...');
+                const encContent = await encryptAES(content, dek);
+                
+                log('Dérivation de la clé maîtresse locale (KEK) via SHA-256...');
+                const kek = await deriveKey(masterKey);
+                
+                log('Chiffrement de la DEK avec la clé maîtresse KEK...');
+                const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
+                const encDek = await encryptAES(dekString, kek);
+
+                log('Envoi des données CHIFRÉES à l\'API FastAPI...');
+                const payload = {
+                    encrypted_title: encTitle,
+                    encrypted_content: encContent,
+                    encrypted_dek: encDek
+                };
 
                 const response = await fetch(`${API_URL}/api/documents`, {
                     method: 'POST',
@@ -810,30 +621,39 @@
                         'Content-Type': 'application/json',
                         'X-User-Id': userId
                     },
-                    body: JSON.stringify({ title, content })
+                    body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    log('✅ Serveur a chiffré (Fernet/AES) et stocké le document dans Supabase.', 'info');
-                    log(`→ Doc ID : ${data.id}`, 'info');
-                    showStatus('Dossier médical chiffré et stocké avec succès !', 'success');
-                    clearForm();
+                    log(`✅ L'API a stocké les données (ID : ${data.id.substring(0, 8)}...).`, 'info');
+                    showStatus('Dossier médical chiffré et stocké en base de données avec succès', 'success');
+                    
+                    document.getElementById('docTitle').value = '';
+                    document.getElementById('docContent').value = '';
                     await fetchDocuments();
                 } else {
-                    const err = await response.text();
-                    log('Erreur serveur : ' + err, 'error');
-                    showStatus('Erreur lors de la transmission au serveur.', 'error');
+                    const errorText = await response.text();
+                    log('Erreur serveur: ' + errorText, 'error');
+                    showStatus('Erreur serveur lors de la transmission', 'error');
                 }
-            } catch (e) {
-                log('Erreur réseau : ' + e.message, 'error');
-                showStatus('Impossible de joindre le serveur FastAPI. Est-il démarré ?', 'error');
+            } catch (error) {
+                log('Erreur cryptographique : ' + error.message, 'error');
+                showStatus('Une erreur est survenue pendant le chiffrement local', 'error');
             }
         }
 
         // ─── GENERATE TEST DOCUMENTS ─────────────────────────────────
+
         async function generateTestDocuments() {
+            let masterKey = document.getElementById('masterKey').value.trim();
             const userId = document.getElementById('userId').value.trim() || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+
+            if (!masterKey) {
+                log('Clé principale manquante, génération automatique...', 'info');
+                generateAndCopyPassword();
+                masterKey = document.getElementById('masterKey').value.trim();
+            }
 
             const testDocs = [
                 {
@@ -850,48 +670,55 @@
                 }
             ];
 
-            log('Génération de 3 dossiers médicaux de test...', 'info');
+            log('Génération de 3 dossiers médicaux de test chiffrés localement...', 'info');
             let count = 0;
 
             for (const doc of testDocs) {
                 try {
+                    const dek = crypto.getRandomValues(new Uint8Array(32));
+                    const encTitle = await encryptAES(doc.title, dek);
+                    const encContent = await encryptAES(doc.content, dek);
+                    const kek = await deriveKey(masterKey);
+                    const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
+                    const encDek = await encryptAES(dekString, kek);
+
+                    const payload = { encrypted_title: encTitle, encrypted_content: encContent, encrypted_dek: encDek };
+                    
                     const response = await fetch(`${API_URL}/api/documents`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'X-User-Id': userId },
-                        body: JSON.stringify(doc)
+                        body: JSON.stringify(payload)
                     });
+
                     if (response.ok) {
                         count++;
-                        log(`✅ Dossier ${count}/3 chiffré et transmis : "${doc.title.substring(0, 35)}..."`, 'info');
+                        log(`✅ Dossier ${count}/3 chiffré et transmis.`, 'info');
+                    } else {
+                        log(`❌ Erreur API pour le dossier ${count + 1}`, 'error');
                     }
                 } catch (e) {
-                    log(`❌ Erreur pour le dossier ${count + 1}: ` + e.message, 'error');
+                    log(`❌ Erreur Crypto pour le dossier ${count + 1}: ` + e.message, 'error');
                 }
             }
 
-            showStatus(`${count} dossier(s) médicaux générés et stockés chiffrés !`, 'success');
+            showStatus(`${count} dossier(s) de test générés et stockés (Zéro-Connaissance) !`, 'success');
             await fetchDocuments();
         }
 
-        // ─── FETCH DOCUMENTS (Decrypted + Raw) ───────────────────────
+        // ─── FETCH DOCUMENTS ─────────────────────────────────────────
+
         async function fetchDocuments() {
             const userId = document.getElementById('userId').value.trim();
             if (!userId) return;
 
             try {
-                log(`Récupération des dossiers pour l'utilisateur ${userId.substring(0, 8)}...`);
+                log(`Récupération des dossiers (chiffrés) pour l'utilisateur ${userId.substring(0, 8)}...`);
 
-                // Fetch decrypted documents from API
-                const [decResponse, rawResponse] = await Promise.all([
-                    fetch(`${API_URL}/api/documents`, { headers: { 'X-User-Id': userId } }),
-                    fetch(`${API_URL}/api/documents/raw`, { headers: { 'X-User-Id': userId } })
-                ]);
+                const response = await fetch(`${API_URL}/api/documents`, { headers: { 'X-User-Id': userId } });
 
-                if (decResponse.ok && rawResponse.ok) {
-                    LOADED_DOCS = await decResponse.json();
-                    LOADED_RAW_DOCS = await rawResponse.json();
-
-                    log(`✅ ${LOADED_DOCS.length} dossier(s) récupéré(s) et déchiffré(s) par le serveur.`, 'info');
+                if (response.ok) {
+                    LOADED_DOCS = await response.json();
+                    log(`✅ ${LOADED_DOCS.length} document(s) chiffré(s) récupéré(s) du serveur.`, 'info');
                     renderDocuments();
                 } else {
                     log('Erreur lors de la récupération des dossiers.', 'error');
@@ -902,6 +729,7 @@
         }
 
         // ─── RENDER DOCUMENTS ─────────────────────────────────────────
+
         function renderDocuments() {
             const container = document.getElementById('documentsList');
 
@@ -915,29 +743,25 @@
             }
 
             container.innerHTML = LOADED_DOCS.map(doc => {
-                const raw = LOADED_RAW_DOCS.find(r => r.id === doc.id);
-                const encPreview = raw ? raw.encrypted_title : '…données chiffrées indisponibles…';
                 const dateStr = new Date(doc.created_at).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
 
                 return `
                 <div class="doc-card" onclick="openDocumentInVault('${doc.id}')">
-                    <span class="doc-badge">🔐 AES Fernet</span>
-                    <div class="doc-card-title">${doc.title}</div>
+                    <span class="doc-badge">🔐 AES Client</span>
+                    <div class="doc-card-title">Dossier Médical Chiffré</div>
                     <div class="doc-meta">
                         <span>📅 ${dateStr}</span>
                         <span>ID: ${doc.id.substring(0, 8)}…</span>
                     </div>
                     
-                    <div class="doc-encrypted-preview">${encPreview}</div>
-                    
-                    <div class="doc-decrypted-badge">
-                        <strong>✅ Contenu déchiffré par le serveur</strong>
-                        ${doc.content.substring(0, 100)}${doc.content.length > 100 ? '…' : ''}
+                    <div class="doc-encrypted-preview">
+                        [TITRE CHIFFRÉ]<br/>${doc.encrypted_title.substring(0, 40)}...<br/><br/>
+                        [CONTENU CHIFFRÉ]<br/>${doc.encrypted_content.substring(0, 60)}...
                     </div>
                     
                     <div class="doc-actions">
                         <button class="btn-glow-primary" style="padding:10px 14px; font-size:11px;" onclick="openDocumentInVault('${doc.id}'); event.stopPropagation();">
-                            🔬 Inspecter
+                            🔑 Ouvrir dans le Coffre
                         </button>
                     </div>
                 </div>`;
@@ -945,80 +769,84 @@
         }
 
         // ─── VAULT / INSPECTOR ─────────────────────────────────────────
-        function onVaultDocIdChanged() {
-            const docId = document.getElementById('vaultDocId').value.trim();
-            // Auto-inspect if valid UUID length
-            if (docId.length === 36) inspectDocument();
-        }
 
         function openDocumentInVault(docId) {
             switchTab('vault');
             document.getElementById('vaultDocId').value = docId;
-            inspectDocument();
         }
 
         async function inspectDocument() {
             const docId = document.getElementById('vaultDocId').value.trim();
+            const masterKey = document.getElementById('vaultMasterKey').value.trim();
+
             if (!docId) { showStatus('Veuillez entrer un UUID de document.', 'error'); return; }
+            if (!masterKey) { showStatus('Veuillez entrer votre clé maîtresse (mot de passe).', 'error'); return; }
 
-            const rawDoc = LOADED_RAW_DOCS.find(r => r.id === docId);
-            const decDoc = LOADED_DOCS.find(d => d.id === docId);
-
-            if (!rawDoc || !decDoc) {
+            const targetDoc = LOADED_DOCS.find(d => d.id === docId);
+            if (!targetDoc) {
                 showStatus('Document introuvable. Actualisez la liste depuis le Dashboard.', 'error');
                 return;
             }
 
-            SELECTED_DOC_ID = docId;
-
             const tracker = document.getElementById('cryptoProcessTracker');
             tracker.style.display = 'block';
-            document.getElementById('comparisonPanel').style.display = 'none';
             document.getElementById('medicalDossier').style.display = 'none';
 
-            const s1 = document.getElementById('stepFetch');
-            const s2 = document.getElementById('stepDecrypt');
-            const s3 = document.getElementById('stepDisplay');
+            const stepKEK = document.getElementById('stepKEK');
+            const stepDEK = document.getElementById('stepDEK');
+            const stepData = document.getElementById('stepData');
             document.querySelectorAll('.step-ind').forEach(s => s.className = 'step-ind');
 
-            // Step 1: Fetch raw
-            s1.className = 'step-ind active';
-            log('Inspection : Récupération des données brutes depuis Supabase...', 'info');
-            await sleep(700);
-            s1.className = 'step-ind success';
+            try {
+                // Step 1: Derive KEK
+                stepKEK.className = 'step-ind active';
+                log('Vault : Dérivation KEK (SHA-256)...');
+                await sleep(500);
+                const kek = await deriveKey(masterKey);
+                stepKEK.className = 'step-ind success';
 
-            // Step 2: Decrypt
-            s2.className = 'step-ind active';
-            log('Inspection : Le serveur applique Fernet.decrypt (AES-128-CBC + HMAC-SHA256)...', 'info');
-            await sleep(800);
-            s2.className = 'step-ind success';
+                // Step 2: Decrypt DEK
+                stepDEK.className = 'step-ind active';
+                log('Vault : Déchiffrement de la DEK avec KEK...');
+                await sleep(500);
+                let dekStr;
+                try {
+                    dekStr = await decryptAES(targetDoc.encrypted_dek, kek);
+                } catch (e) {
+                    throw new Error('Mot de passe incorrect ou données corrompues (Échec KEK->DEK).');
+                }
+                const dek = Uint8Array.from(atob(dekStr), c => c.charCodeAt(0));
+                stepDEK.className = 'step-ind success';
 
-            // Step 3: Display
-            s3.className = 'step-ind active';
-            await sleep(500);
-            s3.className = 'step-ind success';
-            log('Inspection : Données déchiffrées disponibles.', 'info');
+                // Step 3: Decrypt Data
+                stepData.className = 'step-ind active';
+                log('Vault : Déchiffrement AES-GCM des données finales...');
+                await sleep(500);
+                const title = await decryptAES(targetDoc.encrypted_title, dek);
+                const content = await decryptAES(targetDoc.encrypted_content, dek);
+                stepData.className = 'step-ind success';
 
-            // Show comparison
-            document.getElementById('cmpEncTitle').textContent = rawDoc.encrypted_title;
-            document.getElementById('cmpEncContent').textContent = rawDoc.encrypted_content;
-            document.getElementById('cmpDecTitle').textContent = decDoc.title;
-            document.getElementById('cmpDecContent').textContent = decDoc.content;
-            document.getElementById('comparisonPanel').style.display = 'block';
+                // Show dossier
+                await sleep(300);
+                document.getElementById('dosDocId').textContent = targetDoc.id;
+                document.getElementById('dosUserId').textContent = targetDoc.user_id;
+                document.getElementById('dosDate').textContent = new Date(targetDoc.created_at).toLocaleString('fr-FR');
+                document.getElementById('dosTitleText').textContent = title;
+                document.getElementById('dosContentText').textContent = content;
+                document.getElementById('medicalDossier').style.display = 'block';
+                
+                log('Vault : Déchiffrement réussi. Dossier ouvert en mémoire locale.', 'info');
+                showStatus('Dossier déchiffré avec succès !', 'success');
 
-            // Show dossier
-            await sleep(300);
-            document.getElementById('dosDocId').textContent = decDoc.id;
-            document.getElementById('dosUserId').textContent = decDoc.user_id;
-            document.getElementById('dosDate').textContent = new Date(decDoc.created_at).toLocaleString('fr-FR');
-            document.getElementById('dosTitleText').textContent = decDoc.title;
-            document.getElementById('dosContentText').textContent = decDoc.content;
-            document.getElementById('medicalDossier').style.display = 'block';
+            } catch (error) {
+                log('Vault Erreur : ' + error.message, 'error');
+                showStatus(error.message, 'error');
+                document.querySelectorAll('.step-ind').forEach(s => s.className = 'step-ind');
+            }
         }
 
         function lockDossier() {
             document.getElementById('medicalDossier').style.display = 'none';
-            document.getElementById('comparisonPanel').style.display = 'none';
             document.getElementById('cryptoProcessTracker').style.display = 'none';
             document.getElementById('vaultDocId').value = '';
             document.querySelectorAll('.step-ind').forEach(s => s.className = 'step-ind');
