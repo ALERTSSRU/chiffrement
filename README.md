@@ -1,19 +1,18 @@
-<div align="center">
-  <h1>⚕️ MedVault Pro</h1>
-  <p><strong>Plateforme de Stockage Médical Zéro-Connaissance — Chiffrement Côté Client</strong></p>
-  <br/>
-  <img src="https://img.shields.io/badge/Architecture-Z%C3%A9ro--Connaissance-8A2BE2?style=flat-square" alt="Zero-Knowledge">
-  <img src="https://img.shields.io/badge/Chiffrement-AES--256--GCM%20(Client)-critical?style=flat-square" alt="Encryption">
-  <img src="https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi" alt="FastAPI">
-  <img src="https://img.shields.io/badge/Supabase-PostgreSQL-3ecf8e?style=flat-square&logo=supabase" alt="Supabase">
-</div>
+# ⚕️ MedVault Pro
+
+Plateforme de Stockage Médical Zéro-Connaissance — Chiffrement Côté Client
+
+![Zero-Knowledge](https://img.shields.io/badge/Architecture-Z%C3%A9ro--Connaissance-8A2BE2?style=flat-square)
+![Encryption](https://img.shields.io/badge/Chiffrement-AES--256--GCM%20(Client)-critical?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ecf8e?style=flat-square&logo=supabase)
 
 ---
 
 ## 🎯 Description
 
-**MedVault Pro** est une application web de stockage de dossiers médicaux sécurisée implémentant une architecture **Zéro-Connaissance (Zero-Knowledge)**. 
+**MedVault Pro** est une application web de stockage de dossiers médicaux sécurisée implémentant une architecture **Zéro-Connaissance (Zero-Knowledge)**.
 
 Le chiffrement est intégralement réalisé **côté client (dans le navigateur)** avant que les données ne soient transmises au serveur. L'API FastAPI et la base de données Supabase ne voient et ne stockent que des données chiffrées (Base64) et n'ont **absolument aucun moyen** de les déchiffrer.
 
@@ -24,7 +23,7 @@ Le chiffrement est intégralement réalisé **côté client (dans le navigateur)
 ## ✨ Fonctionnalités Clés
 
 | Fonctionnalité | Description |
-|---|---|
+| --- | --- |
 | 🔐 **Chiffrement Côté Client (Web Crypto API)** | Le navigateur chiffre localement le titre et le contenu (AES-256-GCM) avant tout envoi réseau |
 | 🔑 **Enveloppe Cryptographique (KEK/DEK)** | Utilisation d'une clé de chiffrement de clé (KEK) dérivée du mot de passe via SHA-256, protégeant une clé de données unique (DEK) par document |
 | 📄 **Zéro-Connaissance** | L'API REST ne reçoit que des chaînes Base64 et n'a pas accès au mot de passe de l'utilisateur |
@@ -35,7 +34,7 @@ Le chiffrement est intégralement réalisé **côté client (dans le navigateur)
 
 ## 🏗️ Architecture Cryptographique (Web Crypto API)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────┐
 │               NAVIGATEUR WEB (Client)                   │
 │                                                         │
@@ -68,10 +67,12 @@ Le chiffrement est intégralement réalisé **côté client (dans le navigateur)
 ## 🚀 Installation
 
 ### Prérequis
+
 - Python 3.10+
 - Un projet [Supabase](https://supabase.com) actif
 
 ### 1. Cloner et installer
+
 ```bash
 git clone https://github.com/ALERTSSRU/chiffrement.git
 cd chiffrement
@@ -79,26 +80,31 @@ pip install -r requirements.txt
 ```
 
 ### 2. Configurer l'environnement
+
 Créer un fichier `.env` à la racine :
+
 ```env
 SUPABASE_URL=https://votre-projet.supabase.co
 SUPABASE_ANON_KEY=votre-cle-anon
 ```
 
 ### 3. Initialiser la base de données
+
 Exécuter le fichier `migration.sql` dans le **SQL Editor** de votre projet Supabase.
 
 ### 4. Démarrer
+
 ```bash
 python main.py
 ```
+
 Ouvrir `http://127.0.0.1:8000` dans votre navigateur.
 
 ---
 
 ## 📁 Structure du Projet
 
-```
+```text
 chiffrement/
 ├── main.py           # API FastAPI (Zéro-Connaissance, aucun chiffrement)
 ├── config.py         # Configuration (Variables d'environnement)
@@ -116,7 +122,7 @@ chiffrement/
 L'API est conçue pour être "stupide" et sécurisée : elle ne manipule que de la donnée opaque.
 
 | Méthode | Route | Description |
-|---|---|---|
+| --- | --- | --- |
 | `GET` | `/` | Sert l'interface web |
 | `POST` | `/api/documents` | Reçoit et stocke un document chiffré (`encrypted_title`, `encrypted_content`, `encrypted_dek`) |
 | `GET` | `/api/documents` | Renvoie la liste des documents chiffrés à l'utilisateur |
@@ -129,6 +135,4 @@ MIT — Voir le fichier [LICENSE](LICENSE)
 
 ---
 
-<p align="center">
-  <i>Projet réalisé dans le cadre d'un cours de cryptographie — ALIM ZATO // ALERTSSRU</i>
-</p>
+Projet réalisé dans le cadre d'un cours de cryptographie — ALIM ZATO // ALERTSSRU
