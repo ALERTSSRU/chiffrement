@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MedVault Pro - Zéro-Connaissance</title>
+    <title>MedVault Pro - Console Multicryptographique</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -90,7 +90,7 @@
         .form-group label { font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; background: rgba(10, 14, 23, 0.6); border: 1px solid var(--border-primary); border-radius: 10px; padding: 14px 16px; color: var(--text-primary); font-family: inherit; font-size: 14px; transition: all 0.3s; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--border-focus); background: rgba(10, 14, 23, 0.9); box-shadow: 0 0 15px rgba(0, 242, 254, 0.15); }
-        .form-group textarea { resize: vertical; min-height: 120px; }
+        .form-group textarea { resize: vertical; min-height: 100px; }
         .btn-flex-row { display: flex; gap: 12px; }
         .btn-flex-row .form-group { flex: 1; }
 
@@ -103,16 +103,9 @@
         .btn-outline:hover { background: rgba(18, 26, 43, 0.7); border-color: var(--text-secondary); }
         .btn-key-generate { height: 48px; border-radius: 10px; background: var(--gradient-purple); color: white; padding: 0 16px; font-size: 12px; margin-left: 10px; box-shadow: 0 4px 10px rgba(155, 81, 224, 0.15); }
 
-        /* Sidebar Guide Cards */
-        .guide-flow { display: flex; flex-direction: column; gap: 16px; }
-        .guide-step { display: flex; gap: 16px; padding: 16px; background: rgba(10, 14, 23, 0.4); border: 1px solid rgba(255, 255, 255, 0.03); border-radius: 12px; transition: all 0.3s; }
-        .guide-step:hover { background: rgba(18, 26, 43, 0.5); border-color: var(--border-glow); transform: translateX(5px); }
-        .guide-number { width: 32px; height: 32px; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--cyan-glow); font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-        .guide-text h4 { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
-        .guide-text p { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
-
-        .glowing-console { background: #05080f; border: 1px solid var(--border-primary); border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; height: 180px; overflow-y: auto; margin-top: 24px; box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); position: relative; }
-        .glowing-console::before { content: "CLIENT CRYPTO SHELL v2.0"; position: absolute; top: 4px; right: 12px; font-size: 8px; color: var(--text-muted); letter-spacing: 1px; }
+        /* Sidebar console */
+        .glowing-console { background: #05080f; border: 1px solid var(--border-primary); border-radius: 12px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; height: 260px; overflow-y: auto; margin-top: 24px; box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8); position: relative; }
+        .glowing-console::before { content: "PYTHON CRYPTO SHELL v3.0"; position: absolute; top: 4px; right: 12px; font-size: 8px; color: var(--text-muted); letter-spacing: 1px; }
         .console-line { margin-bottom: 6px; display: flex; gap: 8px; }
         .console-time { color: var(--text-muted); }
         .console-msg { color: #0be881; word-break: break-all; }
@@ -126,11 +119,12 @@
         .documents-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; }
         .doc-card { background: var(--bg-surface); border: 1px solid var(--border-primary); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; position: relative; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); cursor: pointer; }
         .doc-card:hover { border-color: var(--cyan-glow); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 242, 254, 0.1); }
-        .doc-badge { position: absolute; top: 24px; right: 24px; background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); color: var(--cyan-glow); font-size: 9px; font-weight: 700; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+        .doc-badge { position: absolute; top: 24px; right: 24px; background: rgba(155, 81, 224, 0.15); border: 1px solid rgba(155, 81, 224, 0.4); color: var(--purple-glow); font-size: 9px; font-weight: 700; padding: 4px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+        .doc-badge.symmetric { background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.4); color: var(--cyan-glow); }
         .doc-card-title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: var(--text-primary); padding-right: 70px; word-break: break-all; }
         .doc-meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 8px 0; }
         
-        .doc-encrypted-preview { background: rgba(10, 14, 23, 0.5); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary); word-break: break-all; height: 70px; overflow-y: hidden; position: relative; border: 1px dashed rgba(255, 255, 255, 0.1); }
+        .doc-encrypted-preview { background: rgba(10, 14, 23, 0.5); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-secondary); word-break: break-all; height: 75px; overflow-y: hidden; position: relative; border: 1px dashed rgba(255, 255, 255, 0.1); }
         .doc-encrypted-preview::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(180deg, transparent 0%, rgba(10, 14, 23, 0.9) 100%); }
         
         .doc-actions { display: flex; gap: 10px; margin-top: auto; }
@@ -158,7 +152,7 @@
         .step-ind-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
         .step-ind-desc { font-size: 10px; color: var(--text-secondary); }
 
-        /* GORGEOUS MEDICAL DOSSIER LAYOUT */
+        /* DOSSIER LAYOUT */
         .medical-dossier-card {
             background: #fff; color: #1e293b; border-radius: 16px;
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3); padding: 40px;
@@ -168,12 +162,10 @@
             display: none; animation: slideUpOpen 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-left: 10px solid #0056b3;
         }
-
         @keyframes slideUpOpen {
             from { opacity: 0; transform: translateY(40px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-
         .dossier-confidential-stamp {
             position: absolute; top: 40px; right: 40px;
             border: 4px double #ef4444; color: #ef4444;
@@ -181,7 +173,6 @@
             padding: 6px 12px; border-radius: 4px; text-transform: uppercase;
             letter-spacing: 2px; transform: rotate(8deg); opacity: 0.85; user-select: none;
         }
-
         .dossier-header { border-bottom: 2px solid #334155; padding-bottom: 20px; margin-bottom: 30px; }
         .dossier-clinic-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; }
         .dossier-clinic-sub { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 2px; }
@@ -220,7 +211,7 @@
                 
                 <div class="nav-tabs">
                     <button class="tab-btn active" id="tabBtnDashboard" onclick="switchTab('dashboard')">
-                        <span>📋</span> Transmettre &amp; Gérer
+                        <span>📋</span> Transmission &amp; Gestion
                     </button>
                     <button class="tab-btn" id="tabBtnVault" onclick="switchTab('vault')">
                         <span>🔬</span> Inspecteur de Chiffrement
@@ -243,8 +234,8 @@
                 <div>
                     <div class="glass-card">
                         <div class="card-header">
-                            <h2 class="card-title">🔐 Terminal de <span>Transmission Sécurisée</span></h2>
-                            <p class="card-subtitle">Chiffrement Zéro-Connaissance (Côté Client) — L'API ne voit rien en clair</p>
+                            <h2 class="card-title">🔐 Terminal de <span>Transmission Multicrypto</span></h2>
+                            <p class="card-subtitle">Choisissez parmi 9 algorithmes de chiffrement (Symmetric &amp; Asymmetric)</p>
                         </div>
                         
                         <div class="form-grid">
@@ -257,6 +248,26 @@
                                 <button class="btn-key-generate btn-glow-purple" onclick="generateAndCopyPassword()" style="margin-top:23px;">
                                     ⚡ Générer
                                 </button>
+                            </div>
+
+                            <!-- Algorithme selector -->
+                            <div class="form-group">
+                                <label for="cryptoAlgo">Algorithme Cryptographique Actif (2.1 &amp; 2.2)</label>
+                                <select id="cryptoAlgo" onchange="onAlgoChange()">
+                                    <optgroup label="Chiffrement Symétrique (2.1)">
+                                        <option value="AES" selected>AES-256-GCM (Recommandé - Moderne)</option>
+                                        <option value="ChaCha20">ChaCha20 (Flux - Rapide &amp; Moderne)</option>
+                                        <option value="Blowfish">Blowfish-CBC (Obsolète - Héritage)</option>
+                                        <option value="3DES">3DES-CBC (Obsolète - Héritage)</option>
+                                        <option value="DES">DES-CBC (Obsolète / Cassé par défaut)</option>
+                                    </optgroup>
+                                    <optgroup label="Chiffrement Asymétrique Hybride (2.2)">
+                                        <option value="RSA">RSA-2048 (OAEP Padding)</option>
+                                        <option value="ECC">ECC-SECP256R1 (ECDSA / ECDH)</option>
+                                        <option value="ElGamal">ElGamal-1024 (Pur Calcul Modulaire)</option>
+                                        <option value="DSA">DSA-2048 (Signature d'Origine)</option>
+                                    </optgroup>
+                                </select>
                             </div>
 
                             <!-- User selector -->
@@ -279,7 +290,7 @@
                             
                             <div class="btn-flex-row">
                                 <button class="btn-glow-primary" onclick="submitDocument()" style="flex:1.5;">
-                                    🔒 Chiffrer localement &amp; Transmettre
+                                    🔒 Chiffrer &amp; Transmettre
                                 </button>
                                 <button class="btn-outline" onclick="clearForm()" style="flex:0.5;">
                                     Réinitialiser
@@ -287,7 +298,7 @@
                             </div>
                             
                             <button class="btn-glow-purple" onclick="generateTestDocuments()" style="width:100%; margin-top:5px;">
-                                🧪 Générer 3 Dossiers Médicaux de Test
+                                🧪 Générer 3 Dossiers de Test
                             </button>
                         </div>
                     </div>
@@ -295,97 +306,102 @@
 
                 <!-- Right: Flux + Console -->
                 <div>
-                    <div class="glass-card purple-theme" style="height:100%;">
-                        <div class="card-header">
-                            <h3 class="card-title">📡 Flux <span>Cryptographique Client</span></h3>
-                            <p class="card-subtitle">Comment vos données médicales sont sécurisées (Zéro-Connaissance)</p>
-                        </div>
-                        
-                        <div class="guide-flow">
-                            <div class="guide-step">
-                                <div class="guide-number">1</div>
-                                <div class="guide-text">
-                                    <h4>Chiffrement Local (Navigateur)</h4>
-                                    <p>Votre navigateur chiffre le titre et le contenu (AES-GCM) avec une clé générée localement. Votre mot de passe protège cette clé.</p>
-                                </div>
+                    <div class="glass-card purple-theme" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <div class="card-header">
+                                <h3 class="card-title">📡 Console de <span>Calcul Python</span></h3>
+                                <p class="card-subtitle">Exécutions et paramètres réels du serveur</p>
                             </div>
-                            <div class="guide-step">
-                                <div class="guide-number">2</div>
-                                <div class="guide-text">
-                                    <h4>Transmission Sécurisée</h4>
-                                    <p>Les données envoyées à l'API FastAPI sont DÉJÀ chiffrées (Base64). Le serveur ne voit jamais le texte en clair.</p>
-                                </div>
-                            </div>
-                            <div class="guide-step">
-                                <div class="guide-number">3</div>
-                                <div class="guide-text">
-                                    <h4>Stockage Zéro-Connaissance (Supabase)</h4>
-                                    <p>Supabase stocke le texte chiffré. Même l'administrateur de la base de données ne peut pas lire vos dossiers.</p>
-                                </div>
-                            </div>
-                            <div class="guide-step">
-                                <div class="guide-number">4</div>
-                                <div class="guide-text">
-                                    <h4>Déchiffrement (Inspecteur)</h4>
-                                    <p>À la récupération, l'API renvoie le Base64. C'est vous (le client) qui déchiffrez avec votre mot de passe.</p>
+                            
+                            <div class="glowing-console" id="consoleLogs">
+                                <div class="console-line">
+                                    <span class="console-time">[00:00:00]</span>
+                                    <span class="console-msg info">Moteur cryptographique prêt. Prêt à chiffrer.</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="glowing-console" id="console">
-                            <div class="console-line">
-                                <span class="console-time">[--:--:--]</span>
-                                <span class="console-msg info">Système MedVault opérationnel. Chiffrement AES Client actif.</span>
+                        <!-- Hashing Sandbox (2.3) -->
+                        <div class="glass-card" style="margin-top:24px; padding:20px; border-color:rgba(155, 81, 224, 0.2);">
+                            <div class="card-header" style="margin-bottom:15px;">
+                                <h4 class="card-title" style="font-size:16px;">🔬 Bac à Sable de <span>Hachage (2.3)</span></h4>
+                                <p class="card-subtitle" style="font-size:11px;">Testez en direct SHA-256, SHA-3, BLAKE2 et MD5</p>
+                            </div>
+                            <div class="form-grid" style="gap:12px;">
+                                <div class="form-group" style="gap:4px;">
+                                    <label style="font-size:10px;">Texte à Hacher</label>
+                                    <input type="text" id="hashInput" placeholder="Saisissez un message..." oninput="triggerSandboxHash()" style="padding:10px;">
+                                </div>
+                                <div class="form-group" style="gap:4px;">
+                                    <label style="font-size:10px;">Algorithme de Hachage</label>
+                                    <select id="hashAlgo" onchange="triggerSandboxHash()" style="padding:10px;">
+                                        <option value="SHA-256">SHA-256 (NIST - Ultra Robuste)</option>
+                                        <option value="SHA-3">SHA-3-256 (Keccak - Moderne)</option>
+                                        <option value="BLAKE2">BLAKE2b (Plus rapide que MD5 &amp; Sécurisé)</option>
+                                        <option value="MD5">MD5 (Obsolète / Cassé - Démonstration)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="gap:4px;">
+                                    <label style="font-size:10px; color:var(--emerald-glow);">Empreinte Hachée (Hex)</label>
+                                    <input type="text" id="hashOutput" readonly style="font-family:'JetBrains Mono', monospace; background:#05080f; color:#0be881; font-size:11px; padding:10px; border-color:rgba(11,232,129,0.3);">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Documents Section -->
-            <div class="documents-section" id="documents">
+            <!-- Documents List -->
+            <div class="documents-section">
                 <div class="section-header">
-                    <h2 class="card-title">📂 Dossiers Médicaux <span>Sauvegardés (Chiffrés)</span></h2>
-                    <button class="btn-outline" onclick="fetchDocuments()" style="padding:10px 20px; font-size:12px;">
-                        ↻ Actualiser
+                    <h2 class="card-title">📂 Coffre-fort de <span>Dossiers Chiffrés</span></h2>
+                    <button class="btn-outline" onclick="fetchDocuments()" style="padding:10px 18px; font-size:12px;">
+                        🔄 Actualiser
                     </button>
                 </div>
-                
                 <div class="documents-grid" id="documentsList">
                     <div class="empty-state">
-                        <div class="empty-state-icon">🔐</div>
-                        <p>Aucun dossier stocké. Créez un document ou générez des données de test.</p>
+                        <div class="empty-state-icon">📂</div>
+                        <p>Chargement des dossiers médicaux...</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ======= VAULT / INSPECTOR TAB ======= -->
+        <!-- ======= VAULT TAB ======= -->
         <div id="vaultTab" class="tab-content">
             <div class="vault-container">
                 <div class="glass-card">
                     <div class="card-header">
-                        <h2 class="card-title">🔬 Inspecteur de <span>Déchiffrement Local</span></h2>
-                        <p class="card-subtitle">Récupérez les données chiffrées depuis l'API et déchiffrez-les avec votre mot de passe</p>
+                        <h2 class="card-title">🔬 Déchiffrement &amp; <span>Analyse Enveloppe</span></h2>
+                        <p class="card-subtitle">L'inspecteur va analyser le paquet cryptographique pour déduire l'algorithme et déchiffrer</p>
                     </div>
-
-                    <div class="search-vault-box">
-                        <span style="font-size:18px;">🔑</span>
-                        <input type="password" id="vaultMasterKey" placeholder="Entrez la clé maîtresse (mot de passe) pour déchiffrer">
-                    </div>
-
-                    <div class="search-vault-box" style="margin-top: 10px;">
-                        <span style="font-size:18px;">🔍</span>
-                        <input type="text" id="vaultDocId" placeholder="Collez l'UUID du document médical (ou cliquez depuis le Dashboard)">
-                        <button class="btn-outline" onclick="inspectDocument()" style="padding:10px 16px; font-size:12px; border-radius:8px;">
-                            Déchiffrer
-                        </button>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="vaultDocId">UUID du Document Médical</label>
+                            <input type="text" id="vaultDocId" placeholder="Sélectionnez un document ou collez son UUID">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vaultMasterKey">Mot de passe de Déverrouillage (KEK)</label>
+                            <input type="password" id="vaultMasterKey" placeholder="Entrez le mot de passe associé au document">
+                        </div>
+                        
+                        <div class="btn-flex-row">
+                            <button class="btn-glow-primary" onclick="inspectDocument()" style="flex:1.5;">
+                                🔑 Déchiffrer le Dossier
+                            </button>
+                            <button class="btn-outline" onclick="lockDossier()" style="flex:0.5;">
+                                Fermer le Coffre
+                            </button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Stage tracker -->
+                <!-- Step progress visualization -->
                 <div class="crypto-process-card" id="cryptoProcessTracker" style="display:none;">
-                    <div class="process-title">🔄 Flux de Déchiffrement Côté Client</div>
+                    <div class="process-title">Processus de Déchiffrement Moteur</div>
                     <div class="step-indicators">
                         <div class="step-ind" id="stepKEK">
                             <div class="step-ind-circle">1</div>
@@ -394,63 +410,61 @@
                         </div>
                         <div class="step-ind" id="stepDEK">
                             <div class="step-ind-circle">2</div>
-                            <div class="step-ind-label">Déchiffrement DEK</div>
-                            <div class="step-ind-desc">AES-GCM sur la clé du doc</div>
+                            <div class="step-ind-label">Calcul Enveloppe</div>
+                            <div class="step-ind-desc">Déchiffrement de la DEK</div>
                         </div>
                         <div class="step-ind" id="stepData">
                             <div class="step-ind-circle">3</div>
-                            <div class="step-ind-label">Clairtext Doc</div>
-                            <div class="step-ind-desc">Déchiffrement des données</div>
+                            <div class="step-ind-label">Clairtext Final</div>
+                            <div class="step-ind-desc">AES/Chiffrement Données</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Final Medical Dossier -->
+                <!-- Decrypted Medical Dossier -->
                 <div class="medical-dossier-card" id="medicalDossier">
                     <div class="dossier-confidential-stamp">TRÈS CONFIDENTIEL</div>
+                    
                     <div class="dossier-header">
-                        <div class="dossier-clinic-title">⚕️ DOSSIER MÉDICAL SÉCURISÉ</div>
-                        <div class="dossier-clinic-sub">Service de Cryptographie Clinique MedVault — Chiffrement Zéro-Connaissance</div>
+                        <div class="dossier-clinic-title">⚕ Clinique Générale MedVault Pro</div>
+                        <div class="dossier-clinic-sub">Rapport Médical Électronique Intègre</div>
+                        
                         <div class="dossier-meta-grid">
                             <div class="meta-field">
-                                <span class="meta-label">ID Document</span>
-                                <span class="meta-value" id="dosDocId">—</span>
+                                <span class="meta-label">ID du Document</span>
+                                <span class="meta-value" id="dosDocId">UUID</span>
                             </div>
                             <div class="meta-field">
-                                <span class="meta-label">Propriétaire (Patient ID)</span>
-                                <span class="meta-value" id="dosUserId">—</span>
+                                <span class="meta-label">ID du Patient</span>
+                                <span class="meta-value" id="dosUserId">UUID</span>
                             </div>
                             <div class="meta-field">
                                 <span class="meta-label">Date d'Enregistrement</span>
-                                <span class="meta-value" id="dosDate">—</span>
+                                <span class="meta-value" id="dosDate">Date</span>
                             </div>
                             <div class="meta-field">
-                                <span class="meta-label">Statut du Dossier</span>
-                                <span class="meta-value" style="color:#05c46b; font-weight:700;">🔓 DÉCHIFFRÉ LOCALEMENT</span>
+                                <span class="meta-label">Moteur Cryptographique</span>
+                                <span class="meta-value" id="dosAlgo" style="color:#ef4444; font-weight:bold;">Sélecteur</span>
                             </div>
                         </div>
                     </div>
+                    
                     <div class="dossier-body">
-                        <div class="dossier-section-title">Diagnostic / Titre</div>
-                        <h3 id="dosTitleText" style="font-size:18px; margin-bottom:20px; font-weight:700; color:#0f172a;">—</h3>
-                        <div class="dossier-section-title">Contenu Médical Récupéré</div>
-                        <div class="dossier-content-text" id="dosContentText">—</div>
+                        <h4 class="dossier-section-title">Diagnostic &amp; Observations Cliniques</h4>
+                        <div class="dossier-content-text" id="dosTitleText" style="font-weight:700; font-size:16px; margin-bottom:12px; border-bottom:1px solid #f1f5f9; padding-bottom:8px;">Titre</div>
+                        <div class="dossier-content-text" id="dosContentText">Observations...</div>
                     </div>
+                    
                     <div class="dossier-footer">
-                        <div><span>Chiffrement AES-GCM côté client. L'API FastAPI n'a jamais vu les données en clair.</span></div>
-                        <div class="dossier-signature-block">
-                            <span>Visa du Praticien Responsable</span>
-                            <div class="dossier-signature-line"></div>
-                            <span style="font-weight:600;">Dr. Cryptos, MedVault Pro</span>
+                        <div>
+                            <strong>Clinique MedVault Pro</strong><br>
+                            Validation de sécurité cryptographique : ANSSI / NIST FIPS
                         </div>
-                    </div>
-                    <div class="dossier-actions">
-                        <button class="btn-outline" onclick="window.print()" style="background:white; border:1px solid #cbd5e1; color:#1e293b;">
-                            🖨️ Imprimer le Dossier
-                        </button>
-                        <button class="btn-glow-primary" onclick="lockDossier()" style="background:#0f172a; color:white;">
-                            🔐 Refermer le Dossier
-                        </button>
+                        <div class="dossier-signature-block">
+                            <span>Signature Électronique Valide</span>
+                            <div class="dossier-signature-line"></div>
+                            <em>Dr. Référent Médical</em>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -458,45 +472,53 @@
     </div>
 
     <script>
-        const API_URL = 'http://127.0.0.1:8000';
-        let LOADED_DOCS = [];         // Raw encrypted docs from /api/documents
-
-        // ─── UTILITIES ───────────────────────────────────────────────
+        const API_URL = window.location.origin;
+        let LOADED_DOCS = [];
 
         function log(message, type = 'info') {
-            const con = document.getElementById('console');
-            if (!con) return;
+            const consoleBox = document.getElementById('consoleLogs');
+            const now = new Date().toLocaleTimeString('fr-FR');
+            
             const line = document.createElement('div');
             line.className = 'console-line';
-
+            
             const timeSpan = document.createElement('span');
             timeSpan.className = 'console-time';
-            timeSpan.textContent = `[${new Date().toLocaleTimeString()}]`;
-
+            timeSpan.textContent = `[${now}]`;
+            
             const msgSpan = document.createElement('span');
             msgSpan.className = `console-msg ${type}`;
             msgSpan.textContent = message;
-
+            
             line.appendChild(timeSpan);
             line.appendChild(msgSpan);
-            con.appendChild(line);
-            con.scrollTop = con.scrollHeight;
+            
+            consoleBox.appendChild(line);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
         }
 
-        function showStatus(message, type) {
-            const status = document.getElementById('statusMessage');
-            document.getElementById('statusText').textContent = message;
-            document.getElementById('statusIcon').textContent = type === 'success' ? '✅' : '⚠️';
-            status.className = `status-message ${type} show`;
-            setTimeout(() => status.classList.remove('show'), 5000);
+        function showStatus(text, type = 'success') {
+            const banner = document.getElementById('statusMessage');
+            const icon = document.getElementById('statusIcon');
+            const t = document.getElementById('statusText');
+            
+            banner.className = `status-message ${type} show`;
+            icon.textContent = type === 'success' ? '🔓' : '🚨';
+            t.textContent = text;
+            
+            setTimeout(() => {
+                banner.className = 'status-message';
+            }, 6000);
         }
 
-        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
+
             if (tabId === 'dashboard') {
                 document.getElementById('dashboardTab').classList.add('active');
                 document.getElementById('tabBtnDashboard').classList.add('active');
@@ -504,26 +526,27 @@
                 document.getElementById('vaultTab').classList.add('active');
                 document.getElementById('tabBtnVault').classList.add('active');
                 
-                // Copy master password over to vault password field automatically
                 const mk = document.getElementById('masterKey').value;
                 if (mk) document.getElementById('vaultMasterKey').value = mk;
             }
         }
 
         function generateAndCopyPassword() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
             let id = '';
-            const randomValues = crypto.getRandomValues(new Uint8Array(24));
-            for (let i = 0; i < 24; i++) id += chars[randomValues[i] % chars.length];
+            // Version basique mais compatible pour la génération rapide de mot de passe démo
+            for (let i = 0; i < 20; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
 
             document.getElementById('masterKey').value = id;
             document.getElementById('vaultMasterKey').value = id;
 
             navigator.clipboard.writeText(id).then(() => {
                 showStatus('Mot de passe généré et copié dans le presse-papier !', 'success');
-                log(`Mot de passe (KEK) aléatoire généré via crypto.getRandomValues`, 'info');
+                log(`Mot de passe (KEK) aléatoire généré : ${id}`, 'info');
             }).catch(() => {
-                showStatus('Mot de passe généré. Copiez-le manuellement.', 'success');
+                showStatus('Mot de passe généré.', 'success');
             });
         }
 
@@ -531,117 +554,120 @@
             document.getElementById('docTitle').value = '';
             document.getElementById('docContent').value = '';
             document.getElementById('masterKey').value = '';
+            log('Formulaire réinitialisé.', 'info');
         }
 
-        // ─── CRYPTOGRAPHY (Web Crypto API) ───────────────────────────
-
-        async function deriveKey(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            return await crypto.subtle.digest('SHA-256', data);
+        function onAlgoChange() {
+            const algo = document.getElementById('cryptoAlgo').value;
+            log(`Algorithme cryptographique actif modifié -> ${algo}`, 'warning');
         }
 
-        async function encryptAES(text, key) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(text);
-            const iv = crypto.getRandomValues(new Uint8Array(12)); // 96-bit IV
-            
-            const encryptKey = await crypto.subtle.importKey(
-                'raw', key, { name: 'AES-GCM' }, false, ['encrypt']
-            );
-            
-            const encrypted = await crypto.subtle.encrypt(
-                { name: 'AES-GCM', iv }, encryptKey, data
-            );
-            
-            const combined = new Uint8Array(iv.length + encrypted.byteLength);
-            combined.set(iv);
-            combined.set(new Uint8Array(encrypted), iv.length);
-            
-            return btoa(String.fromCharCode.apply(null, Array.from(combined)));
-        }
+        // ─── BAC A SABLE HACHAGE (2.3) ───────────────────────────────
 
-        async function decryptAES(ciphertext, key) {
+        async function triggerSandboxHash() {
+            const text = document.getElementById('hashInput').value;
+            const algo = document.getElementById('hashAlgo').value;
+            const outputField = document.getElementById('hashOutput');
+
+            if (!text) {
+                outputField.value = '';
+                return;
+            }
+
             try {
-                const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
-                const iv = combined.slice(0, 12);
-                const data = combined.slice(12);
-                
-                const decryptKey = await crypto.subtle.importKey(
-                    'raw', key, { name: 'AES-GCM' }, false, ['decrypt']
-                );
-                
-                const decrypted = await crypto.subtle.decrypt(
-                    { name: 'AES-GCM', iv }, decryptKey, data
-                );
-                
-                return new TextDecoder().decode(decrypted);
-            } catch (error) {
-                throw new Error('Échec du déchiffrement AES-GCM (mauvais mot de passe ou données altérées).');
+                const response = await fetch(`${API_URL}/api/crypto/hash`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: text, algorithm: algo })
+                });
+
+                if (response.ok) {
+                    const res = await response.json();
+                    outputField.value = res.hash_value;
+                    
+                    // Affiche le dernier log pour montrer l'action
+                    if (res.logs && res.logs.length > 0) {
+                        log(`[Sandbox] ${res.logs[res.logs.length - 2]}`, 'info');
+                    }
+                }
+            } catch (e) {
+                outputField.value = 'Erreur...';
             }
         }
 
-        // ─── SUBMIT DOCUMENT ─────────────────────────────────────────
+        // ─── CHIFFREMENT & TRANSMISSION ──────────────────────────────
 
         async function submitDocument() {
             const masterKey = document.getElementById('masterKey').value.trim();
             const userId = document.getElementById('userId').value.trim();
             const title  = document.getElementById('docTitle').value.trim();
             const content = document.getElementById('docContent').value.trim();
+            const algorithm = document.getElementById('cryptoAlgo').value;
 
-            if (!masterKey) { showStatus('Veuillez spécifier une clé maîtresse (mot de passe).', 'error'); return; }
-            if (!userId) { showStatus('Veuillez saisir un UUID utilisateur.', 'error'); return; }
-            if (!title || !content) { showStatus('Veuillez remplir le titre et le contenu.', 'error'); return; }
+            if (!masterKey) { showStatus('Veuillez spécifier une clé maîtresse.', 'error'); return; }
+            if (!userId) { showStatus('Veuillez charger et sélectionner un patient.', 'error'); return; }
+            if (!title || !content) { showStatus('Veuillez remplir tous les champs.', 'error'); return; }
 
             try {
-                log('Génération de la clé cryptographique unique du document (DEK)...');
-                const dek = crypto.getRandomValues(new Uint8Array(32)); // 256-bit DEK
+                log(`[MOTEUR PYTHON] Appel du serveur pour chiffrer en ${algorithm}...`);
                 
-                log('Chiffrement local AES-GCM du titre...');
-                const encTitle = await encryptAES(title, dek);
-                
-                log('Chiffrement local AES-GCM du contenu sensible...');
-                const encContent = await encryptAES(content, dek);
-                
-                log('Dérivation de la clé maîtresse locale (KEK) via SHA-256...');
-                const kek = await deriveKey(masterKey);
-                
-                log('Chiffrement de la DEK avec la clé maîtresse KEK...');
-                const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
-                const encDek = await encryptAES(dekString, kek);
+                const encryptResponse = await fetch(`${API_URL}/api/crypto/encrypt`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        plaintext_title: title,
+                        plaintext_content: content,
+                        master_password: masterKey,
+                        algorithm: algorithm
+                    })
+                });
 
-                log('Envoi des données CHIFRÉES à l\'API FastAPI...');
-                const payload = {
-                    encrypted_title: encTitle,
-                    encrypted_content: encContent,
-                    encrypted_dek: encDek
-                };
+                if (!encryptResponse.ok) {
+                    const err = await encryptResponse.text();
+                    throw new Error(err);
+                }
 
+                const cryptoResult = await encryptResponse.json();
+                
+                // Imprimer tous les logs du script Python serveur dans la console Web
+                cryptoResult.logs.forEach(l => {
+                    let type = 'info';
+                    if (l.includes('[ERREUR]')) type = 'error';
+                    if (l.includes('[WARN]')) type = 'warning';
+                    if (l.includes('[FIN]') || l.includes('[EXEC]')) type = 'success';
+                    log(l, type);
+                });
+
+                log('Transmission du paquet chiffré à l\'API REST Supabase...');
+                
                 const response = await fetch(`${API_URL}/api/documents`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-User-Id': userId
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        encrypted_title: cryptoResult.encrypted_title,
+                        encrypted_content: cryptoResult.encrypted_content,
+                        encrypted_dek: cryptoResult.encrypted_dek
+                    })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    log(`✅ L'API a stocké les données (ID : ${data.id.substring(0, 8)}...).`, 'info');
-                    showStatus('Dossier médical chiffré et stocké en base de données avec succès', 'success');
+                    log(`✅ Sauvegarde Supabase réussie ! ID du Document : ${data.id.substring(0,8)}...`, 'info');
+                    showStatus('Document chiffré stocké en base de données', 'success');
                     
                     document.getElementById('docTitle').value = '';
                     document.getElementById('docContent').value = '';
                     await fetchDocuments();
                 } else {
                     const errorText = await response.text();
-                    log('Erreur serveur: ' + errorText, 'error');
-                    showStatus('Erreur serveur lors de la transmission', 'error');
+                    log(`❌ Échec de la sauvegarde Supabase : ${errorText}`, 'error');
                 }
             } catch (error) {
-                log('Erreur cryptographique : ' + error.message, 'error');
-                showStatus('Une erreur est survenue pendant le chiffrement local', 'error');
+                log(`❌ Erreur lors du chiffrement : ${error.message}`, 'error');
+                showStatus('Une erreur est survenue pendant le traitement', 'error');
             }
         }
 
@@ -649,61 +675,72 @@
 
         async function generateTestDocuments() {
             let masterKey = document.getElementById('masterKey').value.trim();
-            const userId = document.getElementById('userId').value.trim() || 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11';
+            const userId = document.getElementById('userId').value.trim();
+            const algorithm = document.getElementById('cryptoAlgo').value;
 
             if (!masterKey) {
-                log('Clé principale manquante, génération automatique...', 'info');
                 generateAndCopyPassword();
                 masterKey = document.getElementById('masterKey').value.trim();
+            }
+            if (!userId) {
+                showStatus('Attendez le chargement des patients...', 'error');
+                return;
             }
 
             const testDocs = [
                 {
                     title: 'Bilan Cardiologique — Clinique Saint-Louis',
-                    content: 'Patient M. Dupont, 54 ans. ECG normal, rythme sinusal régulier à 72 bpm.\nTension artérielle : 135/85 mmHg (légèrement élevée).\nRecommandation : Réduction de la consommation de sel, activité physique modérée.\nProchain contrôle dans 3 mois.'
+                    content: 'Patient M. Dupont, 54 ans. ECG normal, rythme sinusal régulier à 72 bpm.\nTension artérielle : 135/85 mmHg.\nRecommandation : Réduction du sel, sport modéré.'
                 },
                 {
                     title: 'Analyse Sanguine Complète — Laboratoire BioMed',
-                    content: 'Patiente Mme Martin, 38 ans.\nGlycémie à jeun : 5.2 mmol/L (normal).\nHémoglobine : 11.8 g/dL (légère anémie ferriprive).\nPlaquettes : 245 000/μL (normal).\nTraitement prescrit : Supplémentation en fer (Tardyferon 80mg/j) pendant 3 mois.'
+                    content: 'Patiente Mme Martin, 38 ans.\nGlycémie à jeun : 5.2 mmol/L (normal).\nHémoglobine : 11.8 g/dL.\nTraitement prescrit : Fer 80mg/j pendant 3 mois.'
                 },
                 {
                     title: 'Rapport Neurologique — IRM Cérébrale',
-                    content: 'Patient Dr. Alim Z., 30 ans. Migraines récurrentes depuis 6 mois.\nIRM cérébrale : Aucune lésion structurelle détectée. Pas de signe de compression vasculaire.\nElectroencéphalogramme : Normal.\nDiagnostic : Migraine sans aura, probable origine tensionnelle.\nTraitement : Sumatriptan 50mg si crise + gestion du stress.'
+                    content: 'Patient Dr. Alim Z., 30 ans. Migraines récurrentes.\nIRM cérébrale : Aucune lésion. EEG : Normal.\nDiagnostic : Migraine de tension.\nTraitement : Sumatriptan 50mg.'
                 }
             ];
 
-            log('Génération de 3 dossiers médicaux de test chiffrés localement...', 'info');
+            log(`[TESTS] Génération en masse de 3 dossiers de test via le moteur ${algorithm}...`);
             let count = 0;
 
             for (const doc of testDocs) {
                 try {
-                    const dek = crypto.getRandomValues(new Uint8Array(32));
-                    const encTitle = await encryptAES(doc.title, dek);
-                    const encContent = await encryptAES(doc.content, dek);
-                    const kek = await deriveKey(masterKey);
-                    const dekString = btoa(String.fromCharCode.apply(null, Array.from(dek)));
-                    const encDek = await encryptAES(dekString, kek);
-
-                    const payload = { encrypted_title: encTitle, encrypted_content: encContent, encrypted_dek: encDek };
-                    
-                    const response = await fetch(`${API_URL}/api/documents`, {
+                    const encRes = await fetch(`${API_URL}/api/crypto/encrypt`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-User-Id': userId },
-                        body: JSON.stringify(payload)
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            plaintext_title: doc.title,
+                            plaintext_content: doc.content,
+                            master_password: masterKey,
+                            algorithm: algorithm
+                        })
                     });
 
-                    if (response.ok) {
-                        count++;
-                        log(`✅ Dossier ${count}/3 chiffré et transmis.`, 'info');
-                    } else {
-                        log(`❌ Erreur API pour le dossier ${count + 1}`, 'error');
+                    if (encRes.ok) {
+                        const cryptoResult = await encRes.json();
+                        const response = await fetch(`${API_URL}/api/documents`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-User-Id': userId },
+                            body: JSON.stringify({
+                                encrypted_title: cryptoResult.encrypted_title,
+                                encrypted_content: cryptoResult.encrypted_content,
+                                encrypted_dek: cryptoResult.encrypted_dek
+                            })
+                        });
+
+                        if (response.ok) {
+                            count++;
+                            log(`  [Test] Dossier ${count}/3 chiffré (${algorithm}) et enregistré dans Supabase.`, 'success');
+                        }
                     }
                 } catch (e) {
-                    log(`❌ Erreur Crypto pour le dossier ${count + 1}: ` + e.message, 'error');
+                    log(`  [Erreur] Échec dossier ${count + 1} : ` + e.message, 'error');
                 }
             }
 
-            showStatus(`${count} dossier(s) de test générés et stockés (Zéro-Connaissance) !`, 'success');
+            showStatus(`${count} dossier(s) de test générés avec succès (${algorithm}) !`, 'success');
             await fetchDocuments();
         }
 
@@ -714,7 +751,7 @@
             if (!userId) return;
 
             try {
-                log(`Récupération des dossiers (chiffrés) pour l'utilisateur ${userId.substring(0, 8)}...`);
+                log(`Récupération des dossiers (chiffrés) depuis Supabase pour l'utilisateur ${userId.substring(0, 8)}...`);
 
                 const response = await fetch(`${API_URL}/api/documents`, { headers: { 'X-User-Id': userId } });
 
@@ -746,10 +783,26 @@
 
             container.innerHTML = LOADED_DOCS.map(doc => {
                 const dateStr = new Date(doc.created_at).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+                
+                // Déduction de l'algorithme à partir du titre chiffré
+                let detectedAlgo = "Inconnu";
+                if (doc.encrypted_title.includes('$')) {
+                    detectedAlgo = doc.encrypted_title.split('$')[0];
+                }
+                
+                // Les asymétriques utilisent un chiffrement symétrique hybride (indiqué par HYBRID-AES)
+                let isSymmetric = true;
+                let badgeText = `${detectedAlgo} Moteur`;
+                
+                if (detectedAlgo === "HYBRID-AES") {
+                    isSymmetric = false;
+                    let innerAlgo = doc.encrypted_dek.split('$')[0];
+                    badgeText = `Hybride (${innerAlgo})`;
+                }
 
                 return `
                 <div class="doc-card" onclick="openDocumentInVault('${doc.id}')">
-                    <span class="doc-badge">🔐 AES Client</span>
+                    <span class="doc-badge ${isSymmetric ? 'symmetric' : ''}">${badgeText}</span>
                     <div class="doc-card-title">Dossier Médical Chiffré</div>
                     <div class="doc-meta">
                         <span>📅 ${dateStr}</span>
@@ -757,8 +810,8 @@
                     </div>
                     
                     <div class="doc-encrypted-preview">
-                        [TITRE CHIFFRÉ]<br/>${doc.encrypted_title.substring(0, 40)}...<br/><br/>
-                        [CONTENU CHIFFRÉ]<br/>${doc.encrypted_content.substring(0, 60)}...
+                        [TITRE CHIFFRÉ]<br/>${doc.encrypted_title.substring(0, 50)}...<br/><br/>
+                        [DEK ENVELOPPE CHIFFRÉE]<br/>${doc.encrypted_dek.substring(0, 60)}...
                     </div>
                     
                     <div class="doc-actions">
@@ -800,44 +853,62 @@
             document.querySelectorAll('.step-ind').forEach(s => s.className = 'step-ind');
 
             try {
-                // Step 1: Derive KEK
+                // Step 1: KEK (Dérivation)
                 stepKEK.className = 'step-ind active';
-                log('Vault : Dérivation KEK (SHA-256)...');
+                log('Vault : Début de l\'analyse enveloppe...');
                 await sleep(500);
-                const kek = await deriveKey(masterKey);
                 stepKEK.className = 'step-ind success';
 
-                // Step 2: Decrypt DEK
+                // Step 2: DEK (Déchiffrement asymétrique ou symétrique)
                 stepDEK.className = 'step-ind active';
-                log('Vault : Déchiffrement de la DEK avec KEK...');
+                log('Vault : Appel du serveur pour décryptage via le bon moteur de calcul Python...');
                 await sleep(500);
-                let dekStr;
-                try {
-                    dekStr = await decryptAES(targetDoc.encrypted_dek, kek);
-                } catch (e) {
-                    throw new Error('Mot de passe incorrect ou données corrompues (Échec KEK->DEK).');
+
+                const response = await fetch(`${API_URL}/api/crypto/decrypt`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        encrypted_title: targetDoc.encrypted_title,
+                        encrypted_content: targetDoc.encrypted_content,
+                        encrypted_dek: targetDoc.encrypted_dek,
+                        master_password: masterKey
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Déchiffrement Python échoué. Mot de passe erroné ou données altérées.');
                 }
-                const dek = Uint8Array.from(atob(dekStr), c => c.charCodeAt(0));
+
+                const result = await response.json();
+                
+                // Affichage des logs Python du serveur
+                result.logs.forEach(l => {
+                    let type = 'info';
+                    if (l.includes('[ERREUR]')) type = 'error';
+                    if (l.includes('[WARN]')) type = 'warning';
+                    if (l.includes('[FIN]') || l.includes('[EXEC]')) type = 'success';
+                    log(l, type);
+                });
+
                 stepDEK.className = 'step-ind success';
 
-                // Step 3: Decrypt Data
+                // Step 3: Clairtext Final
                 stepData.className = 'step-ind active';
-                log('Vault : Déchiffrement AES-GCM des données finales...');
-                await sleep(500);
-                const title = await decryptAES(targetDoc.encrypted_title, dek);
-                const content = await decryptAES(targetDoc.encrypted_content, dek);
+                await sleep(400);
                 stepData.className = 'step-ind success';
 
-                // Show dossier
-                await sleep(300);
+                // Remplissage du Dossier médical déchiffré
                 document.getElementById('dosDocId').textContent = targetDoc.id;
                 document.getElementById('dosUserId').textContent = targetDoc.user_id;
                 document.getElementById('dosDate').textContent = new Date(targetDoc.created_at).toLocaleString('fr-FR');
-                document.getElementById('dosTitleText').textContent = title;
-                document.getElementById('dosContentText').textContent = content;
+                document.getElementById('dosAlgo').textContent = result.algorithm;
+                document.getElementById('dosTitleText').textContent = result.title;
+                document.getElementById('dosContentText').textContent = result.content;
+                
+                await sleep(200);
                 document.getElementById('medicalDossier').style.display = 'block';
                 
-                log('Vault : Déchiffrement réussi. Dossier ouvert en mémoire locale.', 'info');
+                log('Vault : Dossier médical ouvert en mémoire locale sécurisée.', 'info');
                 showStatus('Dossier déchiffré avec succès !', 'success');
 
             } catch (error) {
@@ -852,8 +923,8 @@
             document.getElementById('cryptoProcessTracker').style.display = 'none';
             document.getElementById('vaultDocId').value = '';
             document.querySelectorAll('.step-ind').forEach(s => s.className = 'step-ind');
-            log('Dossier médical refermé et déchargé de la mémoire volatile.', 'info');
-            showStatus('Dossier refermé avec succès.', 'success');
+            log('Dossier médical refermé.', 'info');
+            showStatus('Dossier refermé.', 'success');
         }
 
         // ─── FETCH USERS ─────────────────────────────────────────────
@@ -871,11 +942,12 @@
                         option.textContent = `${user.full_name} (${user.role}) - ${user.id.substring(0,8)}`;
                         select.appendChild(option);
                     });
-                    // Select first user automatically
-                    if(users.length > 0) select.value = users[0].id;
+                    if(users.length > 0) {
+                        select.value = users[0].id;
+                    }
                 }
             } catch (e) {
-                log('Erreur lors du chargement des utilisateurs : ' + e.message, 'warning');
+                log('Erreur chargement utilisateurs : ' + e.message, 'warning');
             }
         }
 

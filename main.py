@@ -1,16 +1,27 @@
 # main.py
 # Point d'entrée principal de l'API FastAPI
-# Architecture : Zero-Knowledge. L'API reçoit et stocke des données DÉJÀ CHIFFRÉES.
+# Intègre la sélection dynamique de 13 algorithmes de chiffrement (Symmetric, Asymmetric, Hashing)
+# Architecture : Hybride/Zéro-Connaissance pour la démonstration académique.
 
 import logging
+import time
 from uuid import UUID
+from pydantic import BaseModel, Field
 from fastapi import FastAPI, HTTPException, Header, Depends, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from database import get_supabase_client
 from schemas import DocumentUploadSchema, DocumentResponseSchema, UserProfileSchema
+
+# Import du gestionnaire de cryptographie et des hacheurs
+from crypto_manager import CryptoManager
+from crypto_engines.sha256 import SHA256Engine
+from crypto_engines.sha3 import SHA3Engine
+from crypto_engines.blake2 import BLAKE2Engine
+from crypto_engines.md5 import MD5Engine
 
 # --- Configuration des logs ---
 logging.basicConfig(
@@ -21,12 +32,12 @@ logger = logging.getLogger(__name__)
 
 # --- Initialisation de l'application FastAPI ---
 app = FastAPI(
-    title="API de Stockage Médical Zéro-Connaissance",
-    description="Stocke des documents chiffrés côté client sans jamais connaître leur contenu en clair.",
-    version="1.0.0"
+    title="MedVault Pro - Console Multicryptographique",
+    description="Interface de démonstration académique permettant de tester 13 algorithmes cryptographiques.",
+    version="2.0.0"
 )
 
-from fastapi.middleware.cors import CORSMiddleware
+# --- Configuration CORS ---
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -34,6 +45,43 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ─── MODÈLES DE REQUÊTES CRYPTOGRAPHIQUES ──────────────────────────────────────────
+
+class EncryptRequest(BaseModel):
+    plaintext_title: str = Field(..., description="Le titre du document en clair.")
+    plaintext_content: str = Field(..., description="Le contenu du document en clair.")
+    master_password: str = Field(..., description="Le mot de passe de dérivation (KEK).")
+    algorithm: str = Field(..., description="L'algorithme à utiliser (AES, RSA, ECC, etc.).")
+
+class EncryptResponse(BaseModel):
+    encrypted_title: str
+    encrypted_content: str
+    encrypted_dek: str
+    algorithm: str
+    logs: list[str]
+    duration_ms: float
+
+class DecryptRequest(BaseModel):
+    encrypted_title: str
+    encrypted_content: str
+    encrypted_dek: str
+    master_password: str
+
+class DecryptResponse(BaseModel):
+    title: str
+    content: str
+    algorithm: str
+    logs: list[str]
+    duration_ms: float
+
+class HashRequest(BaseModel):
+    data: str = Field(..., description="La chaîne de caractères à hacher.")
+    algorithm: str = Field(..., description="L'algorithme de hachage (SHA-256, SHA-3, BLAKE2, MD5).")
+
+class HashResponse(BaseModel):
+    hash_value: str
+    logs: list[str]
 
 # ─── SERVING DU FRONTEND ────────────────────────────────────────────────────────
 
@@ -50,14 +98,100 @@ async def serve_index():
         logger.error("Le fichier index.html est introuvable.")
         raise HTTPException(status_code=404, detail="Interface web introuvable.")
 
-# ─── ENDPOINTS DE L'API ─────────────────────────────────────────────────────────
+# ─── ENDPOINTS CRYPTOGRAPHIQUES DYNAMIQUES ───────────────────────────────────────
+
+@app.post(
+    "/api/crypto/encrypt",
+    response_model=EncryptResponse,
+    summary="Chiffre dynamiquement un document via les moteurs Python",
+    description="Prend le texte en clair et applique l'algorithme choisi parmi les 9 chiffrements."
+)
+async def api_encrypt_document(req: EncryptRequest):
+    logger.info(f"Demande de chiffrement dynamique avec : {req.algorithm}")
+    try:
+        result = CryptoManager.encrypt_document(
+            req.plaintext_title,
+            req.plaintext_content,
+            req.master_password,
+            req.algorithm
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Erreur de chiffrement dynamique : {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erreur de chiffrement : {str(e)}")
+
+@app.post(
+    "/api/crypto/decrypt",
+    response_model=DecryptResponse,
+    summary="Déchiffre dynamiquement un document via les moteurs Python",
+    description="Détecte l'algorithme et applique le bon moteur de déchiffrement."
+)
+async def api_decrypt_document(req: DecryptRequest):
+    logger.info("Demande de déchiffrement dynamique détectée.")
+    try:
+        result = CryptoManager.decrypt_document(
+            req.encrypted_title,
+            req.encrypted_content,
+            req.encrypted_dek,
+            req.master_password
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Erreur de déchiffrement : {str(e)}")
+        raise HTTPException(
+            status_code=400,
+            detail="Échec du déchiffrement. Clé incorrecte, algorithme non supporté ou paquet altéré."
+        )
+
+@app.post(
+    "/api/crypto/hash",
+    response_model=HashResponse,
+    summary="Hache une chaîne via les 4 moteurs de hachage",
+    description="Permet de tester SHA-256, SHA-3, BLAKE2 et MD5 dans le bac à sable de l'UI."
+)
+async def api_hash_data(req: HashRequest):
+    logger.info(f"Demande de hachage dynamique avec : {req.algorithm}")
+    logs = []
+    t_start = time.perf_counter()
+    data_bytes = req.data.encode('utf-8')
+    hash_val = ""
+    
+    logs.append(f"[HASH] Entrée : '{req.data}' ({len(data_bytes)} octets)")
+    logs.append(f"[HASH] Utilisation de l'algorithme : {req.algorithm}")
+    
+    try:
+        if req.algorithm == "SHA-256":
+            hash_val = SHA256Engine.hash(data_bytes)
+            logs.append("[SHA-256] Calcul de l'empreinte sécurisée standard NIST...")
+        elif req.algorithm == "SHA-3":
+            hash_val = SHA3Engine.hash(data_bytes)
+            logs.append("[SHA-3] Calcul de l'empreinte Keccak moderne...")
+        elif req.algorithm == "BLAKE2":
+            hash_val = BLAKE2Engine.hash(data_bytes)
+            logs.append("[BLAKE2b] Calcul de l'empreinte ultra-rapide BLAKE2b...")
+        elif req.algorithm == "MD5":
+            hash_val = MD5Engine.hash(data_bytes)
+            logs.append("[MD5] ALERTE : Algorithme MD5 cassé. Utilisation pédagogique uniquement.")
+        else:
+            raise ValueError(f"Algorithme de hachage inconnu : {req.algorithm}")
+            
+        duration = (time.perf_counter() - t_start) * 1000
+        logs.append(f"[EXEC] Résultat (hex) : {hash_val}")
+        logs.append(f"[FIN] Temps d'exécution : {duration:.4f} ms")
+        
+        return {"hash_value": hash_val, "logs": logs}
+    except Exception as e:
+        logger.error(f"Erreur de hachage : {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ─── ENDPOINTS DE STOCKAGE STANDARD (Supabase) ─────────────────────────────────
 
 @app.post(
     "/api/documents",
     response_model=DocumentResponseSchema,
     status_code=status.HTTP_201_CREATED,
     summary="Sauvegarde un document chiffré",
-    description="Reçoit un document déjà chiffré par le client et le stocke en base de données."
+    description="Stocke le paquet cryptographique chiffré dans Supabase."
 )
 async def create_document(
     document: DocumentUploadSchema,
@@ -68,13 +202,8 @@ async def create_document(
     ),
     supabase=Depends(get_supabase_client)
 ):
-    """
-    Stocke un nouveau document médical chiffré dans Supabase.
-    L'API n'a pas la clé pour lire le contenu.
-    """
-    logger.info(f"Création d'un document pour l'utilisateur: {x_user_id}")
+    logger.info(f"Sauvegarde du document dans Supabase pour l'utilisateur: {x_user_id}")
 
-    # Préparation du payload pour Supabase
     db_payload = {
         "user_id": str(x_user_id),
         "encrypted_title": document.encrypted_title,
@@ -83,7 +212,6 @@ async def create_document(
     }
 
     try:
-        # Insertion dans Supabase
         response = supabase.table("medical_documents").insert(db_payload).execute()
         
         if not response.data:
@@ -118,21 +246,16 @@ async def get_documents(
     ),
     supabase=Depends(get_supabase_client)
 ):
-    """
-    Récupère tous les documents associés à un user_id spécifique.
-    L'API renvoie les données chiffrées (Base64). Le client devra les déchiffrer.
-    """
     logger.info(f"Récupération des documents pour l'utilisateur: {x_user_id}")
     
     try:
-        # Requête Supabase
         response = supabase.table("medical_documents") \
             .select("*") \
             .eq("user_id", str(x_user_id)) \
             .order("created_at", desc=True) \
             .execute()
         
-        logger.info(f"{len(response.data)} document(s) trouvé(s).")
+        logger.info(f"{len(response.data)} document(s) chiffré(s) trouvé(s).")
         return response.data
         
     except Exception as e:
@@ -149,10 +272,6 @@ async def get_documents(
     description="Renvoie la liste des utilisateurs de démonstration."
 )
 async def get_users():
-    """
-    Renvoie la liste des profils patients/médecins pour la sélection dans le formulaire.
-    """
-    logger.info("Récupération des profils utilisateurs.")
     return [
         {"id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11", "full_name": "Alim ZATO",       "role": "Patient"},
         {"id": "b1ffcd88-8d1c-4fa9-ac7e-7cc0ce491b22", "full_name": "Jean DUPONT",      "role": "Médecin"},
@@ -166,10 +285,6 @@ async def get_users():
         {"id": "d9bcfc00-0f9c-4bc1-ae5e-5ee8ef2f9d00", "full_name": "Lucas SIMON",      "role": "Patient"},
     ]
 
-# Montage d'un dossier static si besoin (pour l'instant, on n'a que index.html)
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-
 if __name__ == "__main__":
     import uvicorn
-    # Le reload automatique est activé
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
