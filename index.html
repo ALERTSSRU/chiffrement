@@ -134,23 +134,49 @@
         .empty-state-icon { font-size: 40px; color: var(--text-muted); margin-bottom: 16px; }
 
         /* VAULT SCREEN - DEDICATED DECRYPTION PAGE */
-        .vault-container { max-width: 900px; margin: 30px auto 80px auto; display: flex; flex-direction: column; gap: 30px; }
-        .search-vault-box { display: flex; gap: 12px; background: var(--bg-surface); border: 1px solid var(--border-primary); padding: 16px; border-radius: 16px; align-items: center; }
-        .search-vault-box input { flex: 1; background: transparent; border: none; color: white; font-family: inherit; font-size: 15px; }
-        .search-vault-box input:focus { outline: none; }
+        .vault-container { max-width: 960px; margin: 30px auto 80px auto; display: flex; flex-direction: column; gap: 28px; }
 
         .crypto-process-card { background: #080c14; border: 1px solid var(--border-primary); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
-        .process-title { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px; }
-        .step-indicators { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .step-ind { background: rgba(18, 26, 43, 0.5); border: 1px solid var(--border-primary); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; opacity: 0.5; transition: all 0.4s; }
+        .process-title { font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-secondary); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .step-indicators { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+        .step-ind { background: rgba(18, 26, 43, 0.5); border: 1px solid var(--border-primary); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; opacity: 0.4; transition: all 0.4s; }
         .step-ind.active { opacity: 1; border-color: var(--cyan-glow); box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); }
         .step-ind.success { opacity: 1; border-color: var(--emerald-glow); background: rgba(5, 196, 107, 0.05); }
-        .step-ind-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
+        .step-ind-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
         .step-ind.active .step-ind-circle { border-color: var(--cyan-glow); color: var(--cyan-glow); box-shadow: 0 0 8px rgba(0, 242, 254, 0.4); animation: pulse-border 1.5s infinite; }
         @keyframes pulse-border { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         .step-ind.success .step-ind-circle { background: var(--emerald-glow); border-color: var(--emerald-glow); color: #000; }
         .step-ind-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
-        .step-ind-desc { font-size: 10px; color: var(--text-secondary); }
+        .step-ind-desc { font-size: 10px; color: var(--text-secondary); line-height: 1.4; }
+
+        /* Envelope Analysis Panel */
+        .envelope-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .envelope-block { background: rgba(5, 8, 15, 0.8); border: 1px solid rgba(0, 242, 254, 0.1); border-radius: 10px; padding: 16px; }
+        .envelope-block-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        .envelope-block-title span.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan-glow); display: inline-block; animation: pulse 2s infinite; }
+        .envelope-raw { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #4facfe; word-break: break-all; line-height: 1.6; }
+        .envelope-raw .raw-algo { color: var(--rose-glow); font-weight: 700; }
+        .envelope-raw .raw-sep { color: var(--text-muted); }
+        .envelope-raw .raw-data { color: var(--emerald-glow); }
+
+        /* Algo detection badge */
+        .algo-detection-bar { display: flex; align-items: center; gap: 12px; background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: 10px; padding: 12px 16px; }
+        .algo-detection-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .algo-detection-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--cyan-glow); background: rgba(0, 242, 254, 0.1); border-radius: 6px; padding: 4px 12px; }
+        .algo-detection-type { font-size: 10px; padding: 3px 8px; border-radius: 20px; font-weight: 700; text-transform: uppercase; }
+        .algo-detection-type.sym { background: rgba(0, 242, 254, 0.15); color: var(--cyan-glow); border: 1px solid rgba(0, 242, 254, 0.3); }
+        .algo-detection-type.asym { background: rgba(155, 81, 224, 0.15); color: var(--purple-glow); border: 1px solid rgba(155, 81, 224, 0.3); }
+        .algo-detection-type.hash { background: rgba(5, 196, 107, 0.15); color: var(--emerald-glow); border: 1px solid rgba(5, 196, 107, 0.3); }
+
+        /* Vault Console */
+        .vault-console { background: #05080f; border: 1px solid var(--border-primary); border-radius: 10px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; height: 160px; overflow-y: auto; position: relative; }
+        .vault-console::before { content: "DECRYPT ENGINE LOG"; position: absolute; top: 6px; right: 12px; font-size: 8px; color: var(--text-muted); letter-spacing: 1px; }
+        .vault-log-line { margin-bottom: 4px; display: flex; gap: 8px; }
+        .vault-log-time { color: var(--text-muted); flex-shrink: 0; }
+        .vault-log-msg { color: #0be881; word-break: break-all; }
+        .vault-log-msg.info { color: #4facfe; }
+        .vault-log-msg.warn { color: #ffd32a; }
+        .vault-log-msg.error { color: #ff5e57; }
 
         /* DOSSIER LAYOUT */
         .medical-dossier-card {
@@ -374,26 +400,26 @@
                 <div class="glass-card">
                     <div class="card-header">
                         <h2 class="card-title">🔬 Déchiffrement &amp; <span>Analyse Enveloppe</span></h2>
-                        <p class="card-subtitle">L'inspecteur va analyser le paquet cryptographique pour déduire l'algorithme et déchiffrer</p>
+                        <p class="card-subtitle">L'inspecteur analyse le paquet cryptographique, détecte l'algorithme automatiquement et déchiffre en temps réel</p>
                     </div>
                     
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="vaultDocId">UUID du Document Médical</label>
-                            <input type="text" id="vaultDocId" placeholder="Sélectionnez un document ou collez son UUID">
+                            <input type="text" id="vaultDocId" placeholder="Sélectionnez un document depuis le Dashboard ou collez son UUID ici">
                         </div>
                         
                         <div class="form-group">
                             <label for="vaultMasterKey">Mot de passe de Déverrouillage (KEK)</label>
-                            <input type="password" id="vaultMasterKey" placeholder="Entrez le mot de passe associé au document">
+                            <input type="password" id="vaultMasterKey" placeholder="Entrez le mot de passe utilisé lors du chiffrement">
                         </div>
                         
                         <div class="btn-flex-row">
                             <button class="btn-glow-primary" onclick="inspectDocument()" style="flex:1.5;">
-                                🔑 Déchiffrer le Dossier
+                                🔑 Analyser &amp; Déchiffrer le Dossier
                             </button>
                             <button class="btn-outline" onclick="lockDossier()" style="flex:0.5;">
-                                Fermer le Coffre
+                                🔒 Fermer
                             </button>
                         </div>
                     </div>
@@ -401,22 +427,63 @@
 
                 <!-- Step progress visualization -->
                 <div class="crypto-process-card" id="cryptoProcessTracker" style="display:none;">
-                    <div class="process-title">Processus de Déchiffrement Moteur</div>
+                    <div class="process-title">
+                        <span style="color:var(--cyan-glow);">⬡</span> Processus de Déchiffrement — Moteur Python
+                    </div>
+
+                    <!-- Algo detection banner -->
+                    <div class="algo-detection-bar" id="algoDetectionBar" style="display:none;">
+                        <span class="algo-detection-label">Algorithme détecté :</span>
+                        <span class="algo-detection-value" id="algoDetectedName">—</span>
+                        <span class="algo-detection-type" id="algoDetectedType">—</span>
+                        <span style="margin-left:auto; font-size:11px; color:var(--text-secondary);" id="algoDetectedDesc">—</span>
+                    </div>
+
                     <div class="step-indicators">
                         <div class="step-ind" id="stepKEK">
                             <div class="step-ind-circle">1</div>
                             <div class="step-ind-label">Dérivation KEK</div>
-                            <div class="step-ind-desc">SHA-256 sur mot de passe</div>
+                            <div class="step-ind-desc">SHA-256 sur mot de passe → clé maîtresse 256 bits</div>
+                        </div>
+                        <div class="step-ind" id="stepDetect">
+                            <div class="step-ind-circle">2</div>
+                            <div class="step-ind-label">Détection Algo</div>
+                            <div class="step-ind-desc">Lecture du préfixe enveloppe (AES$, RSA$, ECC$...)</div>
                         </div>
                         <div class="step-ind" id="stepDEK">
-                            <div class="step-ind-circle">2</div>
-                            <div class="step-ind-label">Calcul Enveloppe</div>
-                            <div class="step-ind-desc">Déchiffrement de la DEK</div>
+                            <div class="step-ind-circle">3</div>
+                            <div class="step-ind-label">Déchiffrement DEK</div>
+                            <div class="step-ind-desc">Extraction clé de document via le moteur Python</div>
                         </div>
                         <div class="step-ind" id="stepData">
-                            <div class="step-ind-circle">3</div>
-                            <div class="step-ind-label">Clairtext Final</div>
-                            <div class="step-ind-desc">AES/Chiffrement Données</div>
+                            <div class="step-ind-circle">4</div>
+                            <div class="step-ind-label">Données en Clair</div>
+                            <div class="step-ind-desc">Déchiffrement final du titre et contenu médical</div>
+                        </div>
+                    </div>
+
+                    <!-- Envelope Analysis Panel -->
+                    <div>
+                        <div class="envelope-block-title" style="margin-bottom:10px;">
+                            <span class="dot"></span> Analyse de l'Enveloppe Cryptographique (Paquet Brut Stocké)
+                        </div>
+                        <div class="envelope-panel" id="envelopePanel" style="display:none;">
+                            <div class="envelope-block">
+                                <div class="envelope-block-title">Titre Chiffré — Enveloppe A</div>
+                                <div class="envelope-raw" id="envTitle">—</div>
+                            </div>
+                            <div class="envelope-block">
+                                <div class="envelope-block-title">Clé DEK Enveloppée — Enveloppe B</div>
+                                <div class="envelope-raw" id="envDek">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vault Console -->
+                    <div class="vault-console" id="vaultConsoleLogs">
+                        <div class="vault-log-line">
+                            <span class="vault-log-time">[--:--:--]</span>
+                            <span class="vault-log-msg info">Inspecteur pret. En attente d'un document...</span>
                         </div>
                     </div>
                 </div>
